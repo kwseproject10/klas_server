@@ -1,21 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const mysqlConnection = require("../modules/mysql");
-
-const connection = mysqlConnection.connection;
-// MySQL 연결
-connection.connect((err) => {
-  if (err) {
-    console.error("MySQL connection failed: ", err);
-    return;
-  }
-  console.log("Connected to MySQL");
-});
+const connection = require("../modules/mysql");
 
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   const userID = parseInt(req.query.userID);
-  const password = req.query.password;
+  const PW = req.query.PW;
 
   // Check if userID is NaN and set it to null
   if (isNaN(userID)) {
@@ -23,15 +13,15 @@ router.get("/", (req, res) => {
   }
 
   // Check if password is NULL and set it to null
-  if (password === "NULL") {
-    password = null;
+  if (PW === "NULL") {
+    PW = null;
   }
 
   // MySQL 쿼리를 사용하여 사용자 ID와 비밀번호를 확인
   const query =
     "SELECT ua.user_id, ua.user_pw, up.user_type FROM user_authentications as ua, user_profiles as up where ua.user_id = up.user_id and ua.user_id = ? and ua.user_pw = ?";
 
-  connection.query(query, [userID, password], (err, results) => {
+  connection.query(query, [userID, PW], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });

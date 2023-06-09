@@ -11,6 +11,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 // 밑에서부터 내가 만들은 라우터들
 const authRouter = require("./routes/auth");
+const loadlectureallRouter = require("./routes/loadlectureall");
 
 // express 객체 생성
 var app = express();
@@ -34,6 +35,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 // 밑에서부터 내가 만들은 라우터들
 app.use("/auth", authRouter);
+app.use("/loadlectureall", loadlectureallRouter);
 
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
