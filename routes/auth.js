@@ -36,14 +36,6 @@ router.get("/", (req, res) => {
         userType: results[0].user_type,
       };
       res.json(response);
-    } else {
-      // 인증 실패 시 결과를 응답으로 전송
-      const response = {
-        result: "false",
-        message: "Authentication failed",
-      };
-
-      res.json(response);
     }
   });
 });
