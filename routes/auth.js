@@ -1,18 +1,8 @@
-// auth.js
-
 const express = require("express");
 const router = express.Router();
-const mysql = require("mysql");
+const mysqlConnection = require("../modules/mysql");
 
-// MySQL 연결 설정
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "5903",
-  port: 3306,
-  database: "db_klas",
-});
-
+const connection = mysqlConnection.connection;
 // MySQL 연결
 connection.connect((err) => {
   if (err) {
@@ -22,7 +12,7 @@ connection.connect((err) => {
   console.log("Connected to MySQL");
 });
 
-router.get("/auth", (req, res) => {
+router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   const userID = parseInt(req.query.userID);
   const password = req.query.PW;
