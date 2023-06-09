@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
+// /loadlectureall
 router.get("/", (req, res) => {
   // MySQL 쿼리를 사용하여 전체 강의 목록 읽어오기
   const query = "SELECT * FROM v_lecture_info";
