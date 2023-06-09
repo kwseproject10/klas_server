@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// cors 설정
 app.use(cors());
 
 // 해당 경로로 router 등록

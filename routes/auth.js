@@ -15,11 +15,22 @@ connection.connect((err) => {
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   const userID = parseInt(req.query.userID);
-  const password = req.query.PW;
+  const password = req.query.password;
 
+  // Check if userID is NaN and set it to null
+  if (isNaN(userID)) {
+    userID = null;
+  }
+  console.log(userID);
+
+  // Check if password is NULL and set it to null
+  if (password === "NULL") {
+    password = null;
+  }
+  console.log(password);
   // MySQL 쿼리를 사용하여 사용자 ID와 비밀번호를 확인
   const query =
-    "SELECT ua.user_id, ua.user_pw, up.user_type FROM user_authentications as ua, user_profiles as up where ua.user_id = up.user_id and ua.user_id = ? and ua.user_pw = ?";
+    "SELECT ua.user_id, ua.user_pw, up.user_type FROM user_authentications AS ua, user_profiles AS up WHERE ua.user_id = up.user_id AND ua.user_id = ? AND ua.user_pw = ?";
 
   connection.query(query, [userID, password], (err, results) => {
     if (err) {
@@ -34,6 +45,12 @@ router.get("/", (req, res) => {
         result: "true",
         userID: results[0].user_id,
         userType: results[0].user_type,
+      };
+      res.json(response);
+    } else {
+      // 로그인 실패
+      const response = {
+        result: "false",
       };
       res.json(response);
     }
