@@ -19,7 +19,8 @@ router.get("/", (req, res) => {
 
   // MySQL 쿼리를 사용하여 사용자 ID와 비밀번호를 확인
   const query =
-    "SELECT user_id FROM user_authentications WHERE user_id = ? AND user_pw = ?";
+    "SELECT ua.user_id, ua.user_pw, up.user_type FROM user_authentications as ua, user_profiles as up where ua.user_id = up.user_id and ua.user_id = ? and ua.user_pw = ?";
+
   connection.query(query, [userID, password], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
@@ -32,6 +33,7 @@ router.get("/", (req, res) => {
       const response = {
         result: "true",
         userID: results[0].user_id,
+        userType: results[0].user_type,
       };
       res.json(response);
     } else {
