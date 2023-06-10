@@ -125,12 +125,8 @@ router.get("/", (req, res) => {
             type: row.type,
             credit: row.credit,
             numOfTime: row.numberOfTime,
-            time: [
-                row.time
-            ],
-            place: [
-                row.place
-            ],
+            time: row.time,
+            place: row.place,
             ID: row.ID,
             };
           });
