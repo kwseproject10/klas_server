@@ -6,7 +6,6 @@ const connection = require("../modules/mysql");
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   const userID = parseInt(req.query.userID);
-  const PW = req.query.PW;
 
   // Check if userID is NaN and set it to null
   if (isNaN(userID)) {
@@ -51,7 +50,7 @@ router.get("/", (req, res) => {
     const query =
         "";
 
-    connection.query(query, (err, results) => {
+    connection.query(query, [userID], (err, results) => {
         if (err) {
           console.error("MySQL query error: ", err);
           res.status(500).json({ error: "Internal server error" });

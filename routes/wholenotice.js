@@ -47,7 +47,7 @@ router.get("/", (req, res) => {
     const query =
         "";
 
-    connection.query(query, (err, results) => {
+    connection.query(query, [userID], (err, results) => {
         if (err) {
           console.error("MySQL query error: ", err);
           res.status(500).json({ error: "Internal server error" });
