@@ -22,6 +22,7 @@ const notice = require("./routes/notice");
 const noticepost = require("./routes/noticepost");
 const archive = require("./routes/archive");
 const archivepost = require("./routes/archivepost");
+const assignment = require("./routes/assignment");
 // express 객체 생성
 var app = express();
 
@@ -55,6 +56,7 @@ app.use("/notice", notice);
 app.use("/noticepost", noticepost);
 app.use("/archive", archive);
 app.use("/archivepost", archivepost);
+app.use("/assignment", assignment);
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
