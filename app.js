@@ -18,6 +18,7 @@ const lectures = require("./routes/lectures");
 const wholenotice = require("./routes/wholenotice");
 const wholeassignment = require("./routes/wholeassignment");
 const syllabus = require("./routes/syllabus");
+const notice = require("./routes/notice");
 
 // express 객체 생성
 var app = express();
@@ -48,6 +49,7 @@ app.use("/lectures", lectures);
 app.use("/wholenotice", wholenotice);
 app.use("/wholeassignment", wholeassignment);
 app.use("/syllabus", syllabus);
+app.use("/notice", notice)
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
