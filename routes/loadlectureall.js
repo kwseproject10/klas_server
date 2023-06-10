@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
 
     if (results.length > 0) {
       // 결과를 원하는 형태로 가공
-      const lecInfo = results.map((row) => {
+      const lecInfo = results.map((row, index) => {
         return {
           key: index.toString(),
           ID: `${row.majorID}-${row.lecLevel}-${row.subjectID}-${row.class}`,
@@ -32,6 +32,8 @@ router.get("/", (req, res) => {
           place: row.place,
         };
       });
+
+      console.log(lecInfo);
 
       // 성공 시 결과 응답으로 전송
       return res.json(lecInfo);

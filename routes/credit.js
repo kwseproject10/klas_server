@@ -139,6 +139,8 @@ lecYear,semester,category,uCredit,lecCredit
         creditForGrad: creditForGrad,
       };
 
+      console.log(response);
+
       return res.json(response);
     } else {
       // 데이터가 없는 경우

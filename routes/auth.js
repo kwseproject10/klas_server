@@ -38,6 +38,8 @@ router.get("/", (req, res) => {
         userType: results[0].userType,
       };
 
+      console.log(response);
+
       return res.json(response);
     } else {
       // 결과가 없는 경우 "false" 값을 가진 result 응답으로 전송

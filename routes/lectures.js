@@ -46,6 +46,7 @@ router.get("/", (req, res) => {
           ID: `${row.majorID}-${row.lecLevel}-${row.subjectID}-${row.class}`,
         };
       });
+
       console.log(enrollInfo);
 
       // 성공 시 결과 응답으로 전송
