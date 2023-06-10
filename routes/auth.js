@@ -37,9 +37,11 @@ router.get("/", (req, res) => {
       };
       res.json(response);
     } else {
-      // 로그인 실패
+      // 결과가 없는 경우 "false" 값을 가진 result와 빈 문자열 값을 가진 userID와 userType을 응답으로 전송
       const response = {
         result: "false",
+        userID: "",
+        userType: "",
       };
       res.json(response);
     }

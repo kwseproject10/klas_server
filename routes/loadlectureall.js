@@ -34,7 +34,10 @@ router.get("/", (req, res) => {
       return res.json(formattedResults);
     } else {
       // 데이터가 없는 경우
-      return res.json({ result: [] });
+      const response = {
+        result: "no data",
+      };
+      return res.json(response);
     }
   });
 });

@@ -51,6 +51,12 @@ router.get("/", (req, res) => {
         state: result.state || "",
       };
       res.json(response);
+    } else {
+      // 데이터가 없는 경우
+      const response = {
+        result: "no data",
+      };
+      return res.json(response);
     }
   });
 });
