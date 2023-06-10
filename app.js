@@ -13,7 +13,10 @@ var usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const loadlectureallRouter = require("./routes/loadlectureall");
 const userInformRouter = require("./routes/userInform");
-const schedule = require("./routes/schedule");
+const semestersRouter = require("./routes/semesters");
+const scheduleRouter = require("./routes/schedule");
+const creditRouter = require("./routes/credit");
+
 const lectures = require("./routes/lectures");
 const wholenotice = require("./routes/wholenotice");
 const wholeassignment = require("./routes/wholeassignment");
@@ -24,10 +27,10 @@ const archive = require("./routes/archive");
 const archivepost = require("./routes/archivepost");
 const assignment = require("./routes/assignment");
 const assignmentpost = require("./routes/assignmentpost");
-const semesters = require("./routes/semesters");
 const wholeattendance = require("./routes/wholeattendance");
 const attendance = require("./routes/attendance");
 const enrolllecture = require("./routes/enrolllecture");
+
 // express 객체 생성
 var app = express();
 
@@ -52,7 +55,10 @@ app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 app.use("/loadlectureall", loadlectureallRouter);
 app.use("/userInform", userInformRouter);
-app.use("/schedule", schedule);
+app.use("/semesters", semestersRouter);
+app.use("/schedule", scheduleRouter);
+app.use("/credit", creditRouter);
+
 app.use("/lectures", lectures);
 app.use("/wholenotice", wholenotice);
 app.use("/wholeassignment", wholeassignment);
@@ -63,7 +69,6 @@ app.use("/archive", archive);
 app.use("/archivepost", archivepost);
 app.use("/assignment", assignment);
 app.use("/assignmentpost", assignmentpost);
-app.use("/semesters", semesters);
 app.use("/wholeattendance", wholeattendance);
 app.use("/attendance", attendance);
 app.use("/enrolllecture", enrolllecture);
