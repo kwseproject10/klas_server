@@ -12,35 +12,16 @@ router.get("/", (req, res) => {
         lectureID = null;
     }
 
-  /* {강의 ID 보내면 강의계획서 반환
-    key: "0",
-    name: "소프트웨어공학",
-    professor: "이기훈",
-    professorPhone: "02-940-8674",
-    professorEmail: "kihoonlee@kw.ac.kr",
-    major: "컴퓨터정보공학부",
-    type: "전선",
-    credit: "3",
-    numOfTime: "3",
-    time: ["월5", "수6"],
-    place: "새빛205",
-    ID: "H020-4-0846-01",
-    textBook: {
-      name: "Software Engineering 10th Edition",
-      author: "Ian Sommerville",
-      publisher: "Addison-Wesley"
-    },
-    description: "본 과정은 소프트웨어 공학에 관한 일반적인 입문 과정으로, 소프트웨어 공학의 기본 개념, methods, 실무활용 예 및 최근 기술동향 등을 소개한다.",
-    evaluationRatio: {
-      attendance: "10",
-      midTermExam: "30",
-      finalExam: "30",
-      assignment: "30",
-      attitude: "0",
-      quiz: "0",
-      etc: "0"
-    }
-  }*/
+  /* {강의 ID와 자료실 게시물 ID 보내면 자료실 게시물 상세정보 반환
+      name: "중간고사 결과 공지",
+      poster: "박철수",
+      postDate: "2020.06.08(목) 20:32",
+      postHit: "10",
+      postfileURL: "http://...",
+      postText: `중간고사 결과를 첨부와 같이 공지 합니다. 
+
+이의신청은 6월 7일 수요일 오전 9시~9시 50분 사이에 915호에서 진행됩니다. `,
+}*/
   const query =
     "";
 
