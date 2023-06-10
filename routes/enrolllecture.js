@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
     lectureID = null;
   }
 
-  // 유저 ID와 강의 ID 보내면 해당 유저 수강 강의 추가(수강 신청)
+  // 유저 ID와 강의 ID 보내면 해당 유저 수강 강의 추가(수강 신청) -> true를 정의하려면 뭔갈 보내줘야함
   const query =
     "";
 
