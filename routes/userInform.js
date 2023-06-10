@@ -34,7 +34,6 @@ router.get("/", (req, res) => {
         return;
       }
       if (results.length > 0) {
-        // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
         const response = {
           name: result[0].name,
           type: result[0].type,
@@ -51,13 +50,7 @@ router.get("/", (req, res) => {
           state: result[0].state
         };
         res.json(response);
-      } else {
-        // 로그인 실패
-        const response = {
-          result: "false",
-        };
-        res.json(response);
-      }
+      } 
     });
   });
   

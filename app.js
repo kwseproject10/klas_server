@@ -13,6 +13,8 @@ var usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const loadlectureallRouter = require("./routes/loadlectureall");
 const userInformRouter = require("./routes/userInform")
+
+const schedule = require("./routes/schedule")
 // express 객체 생성
 var app = express();
 
@@ -38,6 +40,7 @@ app.use("/auth", authRouter);
 app.use("/loadlectureall", loadlectureallRouter);
 app.use("/userInform", userInformRouter);
 
+app.use("/schedule", schedule);
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
