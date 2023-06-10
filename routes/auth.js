@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 
   // MySQL 쿼리를 사용하여 사용자 ID와 비밀번호를 확인
   const query =
-    "SELECT ua.user_id, ua.user_pw, up.user_type FROM user_authentications as ua, user_profiles as up where ua.user_id = up.user_id and ua.user_id = ? and ua.user_pw = ?";
+    "SELECT u.userID, u.pw, u.userType FROM users as u where userID = ? and u.pw = ?";
 
   connection.query(query, [userID, PW], (err, results) => {
     if (err) {
@@ -32,8 +32,8 @@ router.get("/", (req, res) => {
       // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
       const response = {
         result: "true",
-        userID: results[0].user_id,
-        userType: results[0].user_type,
+        userID: results[0].userID,
+        userType: results[0].userType,
       };
       res.json(response);
     } else {
