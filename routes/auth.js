@@ -20,7 +20,9 @@ router.get("/", (req, res) => {
 
   // MySQL 쿼리를 사용하여 사용자 ID와 비밀번호를 확인
   const query =
-    "SELECT u.userID, u.pw, u.userType FROM users as u where userID = ? and u.pw = ?";
+    "SELECT u.userID, u.pw, u.userType FROM users as u where userID = ? and u.pw = ?;";
+  // userID,pw,userType
+  // 2017202030,1,student
 
   connection.query(query, [userID, PW], (err, results) => {
     if (err) {
@@ -35,15 +37,15 @@ router.get("/", (req, res) => {
         userID: results[0].userID,
         userType: results[0].userType,
       };
-      res.json(response);
+
+      return res.json(response);
     } else {
-      // 결과가 없는 경우 "false" 값을 가진 result와 빈 문자열 값을 가진 userID와 userType을 응답으로 전송
+      // 결과가 없는 경우 "false" 값을 가진 result 응답으로 전송
       const response = {
         result: "false",
-        userID: "",
-        userType: "",
       };
-      res.json(response);
+
+      return res.json(response);
     }
   });
 });

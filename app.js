@@ -17,7 +17,8 @@ const semestersRouter = require("./routes/semesters");
 const scheduleRouter = require("./routes/schedule");
 const creditRouter = require("./routes/credit");
 
-const lectures = require("./routes/lectures");
+const lecturesRouter = require("./routes/lectures");
+
 const wholenotice = require("./routes/wholenotice");
 const wholeassignment = require("./routes/wholeassignment");
 const syllabus = require("./routes/syllabus");
@@ -59,7 +60,8 @@ app.use("/semesters", semestersRouter);
 app.use("/schedule", scheduleRouter);
 app.use("/credit", creditRouter);
 
-app.use("/lectures", lectures);
+app.use("/lectures", lecturesRouter);
+
 app.use("/wholenotice", wholenotice);
 app.use("/wholeassignment", wholeassignment);
 app.use("/syllabus", syllabus);

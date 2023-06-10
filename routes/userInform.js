@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
   if (isNaN(userID)) {
     userID = null;
   }
+
   /* MySQL 쿼리 유저 정보
       name: "홍길동",
       type: "학부생",
@@ -26,6 +27,8 @@ router.get("/", (req, res) => {
       state: "재학")*/
   const query =
     "select u.userName, u.userType, m.majorName as major, u.userID as ID, s.grade, s.semesterNum as numberOfTerm, u.email, u.phone as phoneNum, u.birth as birthday, (SELECT u.userName where u.userID = s.advisor) as advisor, (SELECT u.email where u.userID = s.advisor) as advisorEmail, (SELECT u.tel where u.userID = s.advisor) as advisorNum, s.state FROM users AS u left JOIN majors AS m ON u.majorID = m.majorID left JOIN students AS s ON u.userID = s.advisor where u.userID = ?;";
+  // userName,userType,major,ID,grade,numberOfTerm,email,phoneNum,birthday,advisor,advisorEmail,advisorNum,state
+  // 김태윤,student,컴퓨터정보공학부,2017202030,NULL,NULL,3daysplit@naver.com,010-4024-9586,1997-04-25,NULL,NULL,NULL,NULL
 
   connection.query(query, [userID], (err, results) => {
     if (err) {
@@ -36,10 +39,10 @@ router.get("/", (req, res) => {
     if (results.length > 0) {
       const result = results[0];
       const response = {
-        name: result.userName || "",
+        name: result.userName,
         type: result.userType || "",
         major: result.major || "",
-        ID: result.ID || "",
+        ID: result.ID,
         grade: result.grade || "",
         numberOfTerm: result.numberOfTerm || "",
         email: result.email || "",
@@ -50,12 +53,14 @@ router.get("/", (req, res) => {
         advisorNum: result.advisorNum || "",
         state: result.state || "",
       };
-      res.json(response);
+
+      return res.json(response);
     } else {
       // 데이터가 없는 경우
       const response = {
-        result: "no data",
+        result: "false",
       };
+
       return res.json(response);
     }
   });

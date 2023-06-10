@@ -14,9 +14,26 @@ router.get("/", (req, res) => {
 
   const query1 =
     "select l.lecYear,l.semester,l.category,e.credit as uCredit,l.credit as lecCredit from  enrollments as e join lectures as l on e.lecKey=l.lecKey join users as u on u.userID = e.studentID where u.userID = ?;";
-
+  /*
+lecYear,semester,category,uCredit,lecCredit
+2023,1,전선,NULL,3
+2023,1,전선,NULL,3
+2023,1,전선,NULL,3
+2023,1,전선,NULL,3
+2023,1,전선,NULL,3
+2023,1,전필,NULL,3
+2022,2,전선,3.0,3
+2022,2,전선,4.5,3
+2022,2,전선,4.0,3
+2022,2,전선,2.5,1
+2022,2,전선,3.0,3
+2022,2,전필,2.5,3
+2022,2,전선,3.5,3
+*/
   const query2 =
     "select distinct g.majorCredit,g.wholeCredit from users as u join majors as m on u.majorID = m.majorID join gradreqs as g on g.majorID = m.majorID where u.userID = ?;";
+  // majorCredit,wholeCredit
+  // 60,133
 
   let creditForGrad = {
     major: 0,
@@ -116,23 +133,20 @@ router.get("/", (req, res) => {
         }
       });
 
-      console.log("userCredit: ", userCredit);
-      console.log(semesterCount);
-      console.log("creditForGrad: ", creditForGrad);
       // 성공 시 결과 응답으로 전송
-
       const response = {
         userCredit: userCredit,
         creditForGrad: creditForGrad,
       };
 
-      res.json(response);
+      return res.json(response);
     } else {
       // 데이터가 없는 경우
       const response = {
         result: "false",
       };
-      res.json(response);
+
+      return res.json(response);
     }
   });
 });
