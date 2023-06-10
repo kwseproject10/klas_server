@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /auth?userID=*&PW=*
+// /syllabus?lectureID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   const lectureID = req.query.lectureID;
 
-  // Check if userID is NaN and set it to null
+  // Check if lectureID is NaN and set it to null
   if (lectureID === "NULL") {
     lectureID = null;
   }

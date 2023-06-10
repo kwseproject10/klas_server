@@ -6,14 +6,13 @@ const connection = require("../modules/mysql");
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   const userID = parseInt(req.query.userID);
-  const PW = req.query.PW;
 
   // Check if userID is NaN and set it to null
   if (isNaN(userID)) {
     userID = null;
   }
 
-/* [ 수강한 학기 반환
+/* [ 수강한 학기 반환 -> 년도와 학기 묶어서 줘야함
     [
         2023,
         1
@@ -42,8 +41,7 @@ router.get("/", (req, res) => {
       // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
       const formattedResults = results.map((row, index) => {
         return [
-          row.
-          row.lec_id,
+          row,
         ];
       });
       res.json(response);

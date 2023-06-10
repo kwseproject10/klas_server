@@ -23,6 +23,11 @@ const noticepost = require("./routes/noticepost");
 const archive = require("./routes/archive");
 const archivepost = require("./routes/archivepost");
 const assignment = require("./routes/assignment");
+const assignmentpost = require("./routes/assignmentpost");
+const semesters = require("./routes/semesters");
+const wholeattendance = require("./routes/wholeattendance");
+const attendance = require("./routes/attendance");
+const enrolllecture = require("./routes/enrolllecture");
 // express 객체 생성
 var app = express();
 
@@ -57,6 +62,11 @@ app.use("/noticepost", noticepost);
 app.use("/archive", archive);
 app.use("/archivepost", archivepost);
 app.use("/assignment", assignment);
+app.use("/assignmentpost", assignmentpost);
+app.use("/semesters", semesters);
+app.use("/wholeattendance", wholeattendance);
+app.use("/attendance", attendance);
+app.use("/enrolllecture", enrolllecture);
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
