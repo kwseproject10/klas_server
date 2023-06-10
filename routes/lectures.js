@@ -33,7 +33,6 @@ router.get("/", (req, res) => {
 
         return {
           key: index.toString(),
-
           name: row.lecName,
           professor: professors,
           major: row.major,
