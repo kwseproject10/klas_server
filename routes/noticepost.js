@@ -5,12 +5,13 @@ const connection = require("../modules/mysql");
 // /auth?userID=*&PW=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const lectureID = req.query.lectureID;
+    const lectureID = req.query.lectureID;
 
-  // Check if userID is NaN and set it to null
-  if (lectureID === "NULL") {
-    lectureID = null;
-  }
+    // Check if lectureID is NaN and set it to null
+    if (lectureID === "NULL") {
+        lectureID = null;
+    }
+
   /* {강의 ID 보내면 강의계획서 반환
     key: "0",
     name: "소프트웨어공학",
@@ -52,41 +53,20 @@ router.get("/", (req, res) => {
     if (results.length > 0) {
       // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
         const response = {
-            key: results[0].key,
             name: results[0].name,
-            professor: results[0].professor,
-            professorPhone: results[0].professorPhone,
-            professorEmail: results[0].professorEmail,
-            major: results[0].major,
-            type: results[0].type,
-            credit: results[0].credit,
-            numOfTime: results[0].numOfTime,
-            time: results[0].time,
-            place: results[0].place,
-            ID: results[0].ID,
-            textBook: {
-                name: results[0].textBook.name,
-                author: results[0].textBook.author,
-                publisher: results[0].textBook.publisher
-            },
-            description: results[0].description,
-            evaluationRatio: {
-                attendance: results[0].evaluationRatio.attendance,
-                midTermExam: results[0].evaluationRatio.midTermExam,
-                finalExam: results[0].evaluationRatio.finalExam,
-                assignment: results[0].evaluationRatio.assignment,
-                attitude: results[0].evaluationRatio.attitude,
-                quiz: results[0].evaluationRatio.quiz,
-                etc: results[0].evaluationRatio.etc
-            }
+            poster: results[0].poser,
+            postDate: results[0].postDate,
+            postHit: results[0].postHit,
+            postfileURL: results[0].postfileURL,
+            postText: results[0].postText,
         };
         res.json(response);
     } else {
       // 강의 찾기 실패
-      const response = {
-        result: "false",
-      };
-      res.json(response);
+        const response = {
+            result: "false",
+        };
+        res.json(response);
     }
   });
 });

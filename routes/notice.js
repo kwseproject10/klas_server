@@ -5,13 +5,12 @@ const connection = require("../modules/mysql");
 // /notice?lectureID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const lectureID = parseInt(req.query.userID);
+    const lectureID = req.query.lectureID;
 
-  // Check if userID is NaN and set it to null
-  if (isNaN(lectureID)) {
-    userID = null;
-  }
-
+  // Check if lectureID is NaN and set it to null
+    if (lectureID === "NULL") {
+        lectureID = null;
+    }
   /* [강의 ID 보내면 해당 강의의 공지사항 반환
       {
         key: "0",
