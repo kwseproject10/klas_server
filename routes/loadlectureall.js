@@ -5,13 +5,13 @@ const connection = require("../modules/mysql");
 // /loadlectureall
 router.get("/", (req, res) => {
   // MySQL 쿼리를 사용하여 전체 강의 목록 읽어오기
-  const query = "SELECT * FROM v_lecture_info";
+  const query =
+    "SELECT * FROM lectures as l, subjects as s, majors as m where l.subjectID=s.subjectID and l.majorID = m.majorID;";
 
   connection.query(query, (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
-      res.status(500).json({ error: "Internal server error" });
-      return;
+      return res.status(500).json({ error: "Internal server error" });
     }
 
     if (results.length > 0) {
@@ -19,25 +19,22 @@ router.get("/", (req, res) => {
       const formattedResults = results.map((row, index) => {
         return {
           key: index.toString(),
-          ID: row.lec_id,
-          name: row.lec_name,
-          major: row.lec_major,
-          type: row.lec_type,
-          credit: row.lec_credit,
-          numOfTime: row.lec_time,
-          professor: row.lec_professor,
-          time: row.lec_time,
-          place: row.lec_place,
+          ID: `${row.majorID}-${row.lecLevel}-${row.subjectID}-${row.class}`,
+          name: row.subjectName,
+          major: row.majorName,
+          type: row.category,
+          credit: row.credit,
+          numOfTime: row.lecHour,
+          professor: row.lecProfessor,
+          time: row.lecTime.replace(".", ","),
+          place: row.place,
         };
       });
       // 성공 시 결과 응답으로 전송
-      res.json(formattedResults);
+      return res.json(formattedResults);
     } else {
       // 데이터가 없는 경우
-      const response = {
-        result: "false",
-      };
-      res.json(response);
+      return res.json({ result: [] });
     }
   });
 });
