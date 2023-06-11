@@ -32,6 +32,7 @@ const wholeattendance = require("./routes/wholeattendance");
 const attendance = require("./routes/attendance");
 const enrolllecture = require("./routes/enrolllecture");
 
+const signupRouter = require("./routes/signup");
 // express 객체 생성
 var app = express();
 
@@ -74,6 +75,8 @@ app.use("/assignmentpost", assignmentpost);
 app.use("/wholeattendance", wholeattendance);
 app.use("/attendance", attendance);
 app.use("/enrolllecture", enrolllecture);
+
+app.use("/signup", signupRouter);
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
