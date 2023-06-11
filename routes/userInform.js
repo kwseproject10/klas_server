@@ -26,32 +26,45 @@ router.get("/", (req, res) => {
       advisorNum: "02-940-8674",
       state: "재학")*/
   const query =
-    "select u.userName, u.userType, m.majorName as major, u.userID as ID, s.grade, s.semesterNum as numberOfTerm, u.email, u.phone as phoneNum, u.birth as birthday, (SELECT u.userName where u.userID = s.advisor) as advisor, (SELECT u.email where u.userID = s.advisor) as advisorEmail, (SELECT u.tel where u.userID = s.advisor) as advisorNum, s.state FROM users AS u left JOIN majors AS m ON u.majorID = m.majorID left JOIN students AS s ON u.userID = s.advisor where u.userID = ?;";
-  // userName,userType,major,ID,grade,numberOfTerm,email,phoneNum,birthday,advisor,advisorEmail,advisorNum,state
-  // 김태윤,student,컴퓨터정보공학부,2017202030,NULL,NULL,3daysplit@naver.com,010-4024-9586,1997-04-25,NULL,NULL,NULL,NULL
+    "select u1.userName, u1.userType,m.majName as major,u1.userID as ID,(select count(*) from (select distinct lecYear, lecSem from enrollments as e join lectures as l on e.lecKey = l.lecKey where e.userID = u1.userID) as yearSem) as numberOfTerm,u1.email,u1.phone as phoneNum,u1.birth as birthday,u2.userName as advisor,u2.email as advisorEmail,u2.tel as advisorNum,u1.userState as state from users as u1 join users as u2 on u1.advID = u2.userID join majors as m on u1.majID = m.majID where u1.userID = ?";
+  /*
+userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorEmail,advisorNum,state
+모범생,student,컴퓨터정보공학부,2020123456,6,swe@kw.ac.kr,010-1234-5678,2000-01-01,이기훈,kihoonlee@kw.ac.kr,02-940-8674,enroll
+*/
 
+  // /userinform?userID=*
   connection.query(query, [userID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
       return;
     }
+
     if (results.length > 0) {
       const result = results[0];
+      const grade =
+        result.numberOfTerm / 2 == 0
+          ? result.numberOfTerm / 2 + 1
+          : result.numberOfTerm / 2;
+
+      const dateString = result.birthday;
+
+      console.log(dateString);
+
       const response = {
-        name: result.userName,
-        type: result.userType || "",
-        major: result.major || "",
-        ID: result.ID,
-        grade: result.grade || "",
-        numberOfTerm: result.numberOfTerm || "",
-        email: result.email || "",
-        phoneNum: result.phoneNum || "",
-        birthday: result.birthday || "",
-        advisor: result.advisor || "",
-        advisorEmail: result.advisorEmail || "",
-        advisorNum: result.advisorNum || "",
-        state: result.state || "",
+        name: result.userName !== null ? result.userName : null,
+        type: result.userType !== null ? result.userType : null,
+        major: result.major !== null ? result.major : null,
+        ID: result.ID !== null ? result.ID : null,
+        grade: grade !== null ? result.grade : null,
+        numberOfTerm: result.numberOfTerm !== null ? result.numberOfTerm : null,
+        email: result.email !== null ? result.email : null,
+        phoneNum: result.phoneNum !== null ? result.phoneNum : null,
+        birthday: result.birthday !== null ? result.birthday : null,
+        advisor: result.advisor !== null ? result.advisor : null,
+        advisorEmail: result.advisorEmail !== null ? result.advisorEmail : null,
+        advisorNum: result.advisorNum !== null ? result.advisorNum : null,
+        state: result.state !== null ? result.state : null,
       };
 
       console.log(response);

@@ -16,7 +16,7 @@ const userInformRouter = require("./routes/userInform");
 const semestersRouter = require("./routes/semesters");
 // const scheduleRouter = require("./routes/schedule");
 const creditRouter = require("./routes/credit");
-// const wholelectureRouter = require("./routes/wholelecture");
+const wholelectureRouter = require("./routes/wholelecture");
 const lecturesRouter = require("./routes/lectures");
 // const wholeattendanceRouter = require("./routes/wholeattendance");
 const wholenoticeRouter = require("./routes/wholenotice");
@@ -34,7 +34,7 @@ const attendance = require("./routes/attendance");
 const enrolllecture = require("./routes/enrolllecture");
 
 const signupRouter = require("./routes/signup");
-const updateinformRouter = require("./routes/updateinform");
+const updateuserinformRouter = require("./routes/updateuserinform");
 // express 객체 생성
 var app = express();
 
@@ -62,7 +62,7 @@ app.use("/userInform", userInformRouter);
 app.use("/semesters", semestersRouter);
 // app.use("/schedule", scheduleRouter);
 app.use("/credit", creditRouter);
-// app.use("/wholelecture", wholelectureRouter);
+app.use("/wholelecture", wholelectureRouter);
 app.use("/lectures", lecturesRouter);
 // app.use("/wholeattendance", wholeattendanceRouter);
 app.use("/wholenotice", wholenoticeRouter);
@@ -80,7 +80,7 @@ app.use("/attendance", attendance);
 app.use("/enrolllecture", enrolllecture);
 
 app.use("/signup", signupRouter);
-app.use("/updateinform", updateinformRouter);
+app.use("/updateuserinform", updateuserinformRouter);
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /semesters?userID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   const userID = parseInt(req.query.userID);
@@ -12,27 +11,17 @@ router.get("/", (req, res) => {
     userID = null;
   }
 
-  /* [ 수강한 학기 반환 -> 년도와 학기 묶어서 줘야함
-    [
-        2023,
-        1
-    ],
-    [
-        2022,
-        2
-    ],
-    [
-        2022,
-        1
-    ],
-    
-]*/
   const query =
-    "select distinct u.userID, l.lecYear, l.semester from users as u inner JOIN enrollments AS e ON u.userID = e.studentID inner JOIN lectures as l on e.lecKey = l.lecKey where u.userID = ?;";
-  // userID,lecYear,semester
-  // 2017202030,2023,1
-  // 2017202030,2022,2
+    "select distinct lecYear, lecSem as semester from enrollments as e join lectures as l on e.lecKey = l.lecKey where e.userID = ? ORDER BY lecYear DESC, lecSem DESC";
+  /*
+lecYear,lecSem
+2022,1
+2021,2
+2021,1
+2020,2
+*/
 
+  // /semesters?userID=*
   connection.query(query, [userID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);

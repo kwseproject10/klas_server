@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /credit?userID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   let userID = parseInt(req.query.userID);
@@ -13,143 +12,206 @@ router.get("/", (req, res) => {
   }
 
   const query1 =
-    "select l.lecYear,l.semester,l.category,e.credit as uCredit,l.credit as lecCredit from  enrollments as e join lectures as l on e.lecKey=l.lecKey join users as u on u.userID = e.studentID where u.userID = ?;";
+    "select creMaj,creGen,creEtc,creTot from users as u join majreqs as mr on u.majID = mr.majID where userID = ?";
   /*
-lecYear,semester,category,uCredit,lecCredit
-2023,1,전선,NULL,3
-2023,1,전선,NULL,3
-2023,1,전선,NULL,3
-2023,1,전선,NULL,3
-2023,1,전선,NULL,3
-2023,1,전필,NULL,3
-2022,2,전선,3.0,3
-2022,2,전선,4.5,3
-2022,2,전선,4.0,3
-2022,2,전선,2.5,1
-2022,2,전선,3.0,3
-2022,2,전필,2.5,3
-2022,2,전선,3.5,3
+creMaj,creGen,creEtc,creTot
+60,0,0,133
 */
+
   const query2 =
-    "select distinct g.majorCredit,g.wholeCredit from users as u join majors as m on u.majorID = m.majorID join gradreqs as g on g.majorID = m.majorID where u.userID = ?;";
-  // majorCredit,wholeCredit
-  // 60,133
+    "select l.lecYear,l.lecSem as semester,l.lecType,l.lecCre,e.enCre from enrollments as e join lectures as l on e.lecKey = l.lecKey where e.userID = ? order by l.lecYear desc, l.lecSem desc";
+  /*
+lecYear,semester,lecType,lecCre,enCre
+2020,2,교필,3,A+
+2020,2,기필,3,A+
+2020,2,기필,3,A
+*/
 
-  let creditForGrad = {
-    major: 0,
-    general: 0,
-    etc: 0,
-    total: 0,
-  };
-
-  connection.query(query1, [userID], (err, results) => {
+  // /credit?userID=*
+  connection.query(query1, [userID], (err, results1) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
       return;
     }
 
-    if (results.length > 0) {
-      const userCredit = {};
-      const semesterCount = {};
+    if (results1.length > 0) {
+      creditForGrad = {
+        major: results1[0].creMaj,
+        general: results1[0].creGen,
+        etc: results1[0].creEtc,
+        total: results1[0].creTot,
+      };
 
-      results.forEach((row) => {
-        const year = row.lecYear;
-        const semester = row.semester;
-
-        // 해당 연도가 userCredit에 없을 경우 초기화
-        if (!userCredit[year]) {
-          userCredit[year] = {};
-        }
-
-        // Initialize semesterCount[year] if not present
-        if (!semesterCount[year]) {
-          semesterCount[year] = {};
-        }
-
-        // 해당 학기가 userCredit[year]에 없을 경우 초기화
-        if (!userCredit[year][semester]) {
-          userCredit[year][semester] = {
-            major: 0,
-            general: 0,
-            etc: 0,
-            total: 0,
-            GPA: -1,
-          };
-          semesterCount[year][semester] = 1;
-        } else {
-          semesterCount[year][semester]++;
-        }
-
-        // 학점 정보 계산
-        if (row.category.charAt(0) === "전") {
-          // 전공 학점
-          userCredit[year][semester].major += row.lecCredit || 0;
-          userCredit[year][semester].total += row.lecCredit || 0;
-          userCredit[year][semester].GPA += row.uCredit || 0;
-        } else if (row.category.charAt(0) === "교") {
-          // 교양 학점
-          userCredit[year][semester].general += row.lecCredit || 0;
-          userCredit[year][semester].total += row.lecCredit || 0;
-          userCredit[year][semester].GPA += row.uCredit || 0;
-        } else {
-          userCredit[year][semester].etc += row.lecCredit || 0;
-          userCredit[year][semester].total += row.lecCredit || 0;
-          userCredit[year][semester].GPA += row.uCredit || 0;
-        }
-      });
-
-      // Calculate average GPA for each semester
-      for (const year in userCredit) {
-        for (const semester in userCredit[year]) {
-          if (userCredit[year][semester].GPA === -1) {
-            userCredit[year][semester].GPA = -1;
-          } else if (semesterCount[year][semester] >= 0) {
-            userCredit[year][semester].GPA =
-              Math.round(
-                (userCredit[year][semester].GPA /
-                  semesterCount[year][semester]) *
-                  10
-              ) / 10;
-          } else {
-            userCredit[year][semester].GPA = 0;
-          }
-        }
-      }
-
-      connection.query(query2, [userID], (err, results2) => {
+      connection.query(query2, [userID], (err, results) => {
         if (err) {
           console.error("MySQL query error: ", err);
           res.status(500).json({ error: "Internal server error" });
           return;
         }
-        if (results2.length > 0) {
-          creditForGrad = {
-            major: results2[0].majorCredit,
-            general: 0,
-            etc: 0,
-            total: results2[0].wholeCredit,
+
+        const userCredit = {};
+        const semesterCount = {};
+
+        if (results.length > 0) {
+          results.forEach((row) => {
+            const year = row.lecYear;
+            const semester = row.semester;
+            let uCre = 0;
+            let gpaCre = 0;
+
+            if (row.lecCre === null) {
+              uCre = null;
+            } else if (row.lecCre === 3) {
+              if (row.enCre === "A+") {
+                uCre = 4.5;
+                gpaCre = 4.5;
+              } else if (row.enCre === "A") {
+                uCre = 4;
+                gpaCre = 4;
+              } else if (row.enCre === "B+") {
+                uCre = 3.5;
+                gpaCre = 3.5;
+              } else if (row.enCre === "B") {
+                uCre = 3;
+                gpaCre = 3;
+              } else if (row.enCre === "C+") {
+                uCre = 2.5;
+                gpaCre = 2.5;
+              } else if (row.enCre === "C") {
+                uCre = 2;
+                gpaCre = 2;
+              } else if (row.enCre === "D+") {
+                uCre = 1.5;
+                gpaCre = 1.5;
+              } else if (row.enCre === "D") {
+                uCre = 1;
+                gpaCre = 1;
+              } else if (row.enCre === "F") {
+                uCre = 0;
+                gpaCre = 0;
+              }
+            } else if (row.lecCre === 1) {
+              if (row.enCre === "A+") {
+                uCre = 1.5;
+                gpaCre = 4.5;
+              } else if (row.enCre === "A") {
+                uCre = 1.5;
+                gpaCre = 4;
+              } else if (row.enCre === "B+") {
+                uCre = 1;
+                gpaCre = 3.5;
+              } else if (row.enCre === "B") {
+                uCre = 1;
+                gpaCre = 3;
+              } else if (row.enCre === "C+") {
+                uCre = 1;
+                gpaCre = 2.5;
+              } else if (row.enCre === "C") {
+                uCre = 0.5;
+                gpaCre = 2;
+              } else if (row.enCre === "D+") {
+                uCre = 0.5;
+                gpaCre = 1.5;
+              } else if (row.enCre === "D") {
+                uCre = 0.5;
+                gpaCre = 1;
+              } else if (row.enCre === "F") {
+                uCre = 0;
+                gpaCre = 0;
+              }
+            }
+
+            // 해당 연도가 userCredit에 없을 경우 초기화
+            if (!userCredit[year]) {
+              userCredit[year] = {};
+            }
+
+            // Initialize semesterCount[year] if not present
+            if (!semesterCount[year]) {
+              semesterCount[year] = {};
+            }
+
+            // 해당 학기가 userCredit[year]에 없을 경우 초기화
+            if (!userCredit[year][semester]) {
+              userCredit[year][semester] = {
+                major: 0,
+                general: 0,
+                etc: 0,
+                total: 0,
+                GPA: -1,
+              };
+              semesterCount[year][semester] = 1;
+            } else {
+              semesterCount[year][semester]++;
+            }
+
+            // 학점 정보 계산
+            if (row.lecType.charAt(0) === "전") {
+              // 전공 학점
+              userCredit[year][semester].major += row.lecCre || 0;
+              userCredit[year][semester].total += row.lecCre || 0;
+              userCredit[year][semester].GPA += gpaCre || 0;
+            } else if (
+              row.lecType.charAt(0) === "교" ||
+              row.lecType.charAt(0) === "기"
+            ) {
+              // 교양 학점
+              userCredit[year][semester].general += row.lecCre || 0;
+              userCredit[year][semester].total += row.lecCre || 0;
+              userCredit[year][semester].GPA += gpaCre || 0;
+            } else {
+              userCredit[year][semester].etc += row.lecCre || 0;
+              userCredit[year][semester].total += row.lecCre || 0;
+              userCredit[year][semester].GPA += gpaCre || 0;
+            }
+          });
+
+          // Calculate average GPA for each semester
+          for (const year in userCredit) {
+            for (const semester in userCredit[year]) {
+              if (userCredit[year][semester].GPA === -1) {
+                userCredit[year][semester].GPA = -1;
+              } else if (semesterCount[year][semester] >= 0) {
+                userCredit[year][semester].GPA =
+                  Math.round(
+                    (userCredit[year][semester].GPA /
+                      semesterCount[year][semester]) *
+                      10
+                  ) / 10;
+              } else {
+                userCredit[year][semester].GPA = 0;
+              }
+            }
+          }
+
+          // 성공 시 결과 응답으로 전송
+          const success = {
+            userCredit: userCredit,
+            creditForGrad: creditForGrad,
           };
+
+          console.log(success);
+
+          return res.json(success);
+        } else {
+          // 데이터가 없는 경우
+          const fail = {
+            result: "false",
+          };
+
+          return res.json(fail);
         }
       });
-
-      // 성공 시 결과 응답으로 전송
-      const response = {
-        userCredit: userCredit,
-        creditForGrad: creditForGrad,
-      };
-
-      console.log(response);
-
-      return res.json(response);
     } else {
       // 데이터가 없는 경우
-      const response = {
+      const fail = {
         result: "false",
       };
 
-      return res.json(response);
+      return res.json(fail);
     }
   });
 });
+
 module.exports = router;
