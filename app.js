@@ -14,21 +14,22 @@ const authRouter = require("./routes/auth");
 const loadlectureallRouter = require("./routes/loadlectureall");
 const userInformRouter = require("./routes/userInform");
 const semestersRouter = require("./routes/semesters");
-const scheduleRouter = require("./routes/schedule");
+// const scheduleRouter = require("./routes/schedule");
 const creditRouter = require("./routes/credit");
-
+// const wholelectureRouter = require("./routes/wholelecture");
 const lecturesRouter = require("./routes/lectures");
+// const wholeattendanceRouter = require("./routes/wholeattendance");
+const wholenoticeRouter = require("./routes/wholenotice");
+const wholeassignmentRouter = require("./routes/wholeassignment");
+const syllabusRouter = require("./routes/syllabus");
+const noticeRouter = require("./routes/notice");
 
-const wholenotice = require("./routes/wholenotice");
-const wholeassignment = require("./routes/wholeassignment");
-const syllabus = require("./routes/syllabus");
-const notice = require("./routes/notice");
 const noticepost = require("./routes/noticepost");
 const archive = require("./routes/archive");
 const archivepost = require("./routes/archivepost");
 const assignment = require("./routes/assignment");
 const assignmentpost = require("./routes/assignmentpost");
-const wholeattendance = require("./routes/wholeattendance");
+
 const attendance = require("./routes/attendance");
 const enrolllecture = require("./routes/enrolllecture");
 
@@ -58,21 +59,22 @@ app.use("/auth", authRouter);
 app.use("/loadlectureall", loadlectureallRouter);
 app.use("/userInform", userInformRouter);
 app.use("/semesters", semestersRouter);
-app.use("/schedule", scheduleRouter);
+// app.use("/schedule", scheduleRouter);
 app.use("/credit", creditRouter);
-
+// app.use("/wholelecture", wholelectureRouter);
 app.use("/lectures", lecturesRouter);
+// app.use("/wholeattendance", wholeattendanceRouter);
+app.use("/wholenotice", wholenoticeRouter);
+app.use("/wholeassignment", wholeassignmentRouter);
+app.use("/syllabus", syllabusRouter);
+app.use("/notice", noticeRouter);
 
-app.use("/wholenotice", wholenotice);
-app.use("/wholeassignment", wholeassignment);
-app.use("/syllabus", syllabus);
-app.use("/notice", notice);
 app.use("/noticepost", noticepost);
 app.use("/archive", archive);
 app.use("/archivepost", archivepost);
 app.use("/assignment", assignment);
 app.use("/assignmentpost", assignmentpost);
-app.use("/wholeattendance", wholeattendance);
+
 app.use("/attendance", attendance);
 app.use("/enrolllecture", enrolllecture);
 
