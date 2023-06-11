@@ -11,38 +11,16 @@ router.get("/", (req, res) => {
   if (lectureID === "NULL") {
     lectureID = null;
   }
-  /* {강의 ID 보내면 강의계획서 반환
-    key: "0",
-    name: "소프트웨어공학",
-    professor: "이기훈",
-    professorPhone: "02-940-8674",
-    professorEmail: "kihoonlee@kw.ac.kr",
-    major: "컴퓨터정보공학부",
-    type: "전선",
-    credit: "3",
-    numOfTime: "3",
-    time: ["월5", "수6"],
-    place: "새빛205",
-    ID: "H020-4-0846-01",
-    textBook: {
-      name: "Software Engineering 10th Edition",
-      author: "Ian Sommerville",
-      publisher: "Addison-Wesley"
-    },
-    description: "본 과정은 소프트웨어 공학에 관한 일반적인 입문 과정으로, 소프트웨어 공학의 기본 개념, methods, 실무활용 예 및 최근 기술동향 등을 소개한다.",
-    evaluationRatio: {
-      attendance: "10",
-      midTermExam: "30",
-      finalExam: "30",
-      assignment: "30",
-      attitude: "0",
-      quiz: "0",
-      etc: "0"
-    }
-  }*/
-  const query =
-    "";
 
+  const query =
+    "select su.subjectName,l.lecProfessor,u.phone,u.email,m.majorName,l.category,l.credit,l.lecHour,l.lecTime,l.place,concat(l.majorID,'-',l.lecLevel,'-',l.subjectID,'-',l.class) as ID,t.title,t.author,t.publisher,sy.lecDescription,sy.attendanceRatio,sy.midtermRatio,sy.finalRatio,sy.assignmentRatio,sy.attitudeRatio,sy.quizRatio,sy.etcRatio from lectures as l left join subjects as su on l.subjectID = su.subjectID left join users as u on l.lecProfessor= u.userName left join majors as m on l.majorID = m.majorID left join syllabi as sy on sy.lecKey = l.lecKey left join textbooks as t on t.lecKey = l.lecKey where concat(l.majorID,'-',l.lecLevel,'-',l.subjectID,'-',l.class) = ?;";
+  /*
+subjectName,lecProfessor,phone,email,majorName,category,credit,lecHour,lecTime,place,ID,title,author,publisher,lecDescription,attendanceRatio,midtermRatio,finalRatio,assignmentRatio,attitudeRatio,quizRatio,etcRatio
+융합적사고와글쓰기,허연실,010-0000-0000,kwu@kw.ac.kr,소프트웨어융합대학,교필,3,3,월1.수2,NULL,H000-1-3095-1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+융합적사고와글쓰기,박상현,010-0000-0000,kwu@kw.ac.kr,소프트웨어융합대학,교필,3,3,월1.수2,NULL,H000-1-3095-1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+*/ // 이거 연도별로 구분안하면 이렇게 2개 올 수 도 있음
+
+  // /syllabus?lectureID=*
   connection.query(query, [lectureID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
@@ -51,41 +29,51 @@ router.get("/", (req, res) => {
     }
     if (results.length > 0) {
       // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
-        const response = {
-            key: results[0].key,
-            name: results[0].name,
-            professor: results[0].professor,
-            professorPhone: results[0].professorPhone,
-            professorEmail: results[0].professorEmail,
-            major: results[0].major,
-            type: results[0].type,
-            credit: results[0].credit,
-            numOfTime: results[0].numOfTime,
-            time: results[0].time,
-            place: results[0].place,
-            ID: results[0].ID,
-            textBook: {
-                name: results[0].textBook.name,
-                author: results[0].textBook.author,
-                publisher: results[0].textBook.publisher
-            },
-            description: results[0].description,
-            evaluationRatio: {
-                attendance: results[0].evaluationRatio.attendance,
-                midTermExam: results[0].evaluationRatio.midTermExam,
-                finalExam: results[0].evaluationRatio.finalExam,
-                assignment: results[0].evaluationRatio.assignment,
-                attitude: results[0].evaluationRatio.attitude,
-                quiz: results[0].evaluationRatio.quiz,
-                etc: results[0].evaluationRatio.etc
-            }
+
+      const lecDetail = results.map((row, index) => {
+        let times = row.lecTime ? row.lecTime.split(".") : [];
+
+        return {
+          key: index.toString(),
+          name: row.subjectName,
+          professor: row.lecProfessor,
+          professorPhone: row.phone,
+          professorEmail: row.email,
+          major: row.majorName,
+          type: row.category,
+          credit: row.credit,
+          numOfTime: row.lecHour,
+          time: times,
+          place: row.place,
+          ID: row.ID,
+          textBook: {
+            name: row.title,
+            author: row.author,
+            publisher: row.publisher,
+          },
+          description: row.lecDescription,
+          evaluationRatio: {
+            attendance: row.attendanceRatio,
+            midTermExam: row.midtermRatio,
+            finalExam: row.finalRatio,
+            assignment: row.assignmentRatio,
+            attitude: row.attitudeRatio,
+            quiz: row.quizRatio,
+            etc: row.etcRatio,
+          },
         };
-        res.json(response);
+      });
+
+      console.log(lecDetail);
+
+      // 성공 시 결과 응답으로 전송
+      return res.json(lecDetail);
     } else {
       // 강의 찾기 실패
       const response = {
         result: "false",
       };
+
       res.json(response);
     }
   });

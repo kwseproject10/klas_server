@@ -20,9 +20,9 @@ const creditRouter = require("./routes/credit");
 const lecturesRouter = require("./routes/lectures");
 // const wholeattendanceRouter = require("./routes/wholeattendance");
 const wholenoticeRouter = require("./routes/wholenotice");
+const wholeassignmentRouter = require("./routes/wholeassignment");
+const syllabusRouter = require("./routes/syllabus");
 
-const wholeassignment = require("./routes/wholeassignment");
-const syllabus = require("./routes/syllabus");
 const notice = require("./routes/notice");
 const noticepost = require("./routes/noticepost");
 const archive = require("./routes/archive");
@@ -64,9 +64,9 @@ app.use("/credit", creditRouter);
 app.use("/lectures", lecturesRouter);
 // app.use("/wholeattendance", wholeattendanceRouter);
 app.use("/wholenotice", wholenoticeRouter);
+app.use("/wholeassignment", wholeassignmentRouter);
+app.use("/syllabus", syllabusRouter);
 
-app.use("/wholeassignment", wholeassignment);
-app.use("/syllabus", syllabus);
 app.use("/notice", notice);
 app.use("/noticepost", noticepost);
 app.use("/archive", archive);
