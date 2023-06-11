@@ -5,7 +5,7 @@ const connection = require("../modules/mysql");
 // /signup
 router.post("/", (req, res) => {
   // 쿼리 파라미터 추출
-    const userinform = {
+    /*const userinform = {
         "studentID" : req.body.studentID,
         "password" : req.body.password,
         "rePassword" : req.body.rePassword,
@@ -19,7 +19,8 @@ router.post("/", (req, res) => {
         "EmailID" : req.body.EmailID,
         "EmailDomain" : req.body.EmailDomain,
         "checkInformPolicy" : req.body.checkInformPolicy,
-    }
+    }*/
+    const userinform = req.body;
 
   /* 회원가입 정보 보내면 회원가입 성공한지 반환
   {
