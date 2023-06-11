@@ -4,10 +4,10 @@ const connection = require("../modules/mysql");
 
 // /signup
 router.post("/", (req, res) => {
-    
+
   const userID = {
-    studentID : req.studentID,
-  }  
+    studentID: req.body.studentID,
+  }
   const userinform = req.body;
 
   /* 회원가입 정보 보내면 회원가입 성공한지 반환
@@ -26,35 +26,35 @@ router.post("/", (req, res) => {
             "EmailDomain" : "gmail.com",
             "checkInformPolicy" : "true"
 }*/
-    const query1 =
+  const query1 =
+    "";
+
+  connection.query(query, userID, (err, results) => {
+    if (err) {
+      console.error("MySQL query error: ", err);
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+
+    if (results.length > 0) {
+      // 결과를 원하는 형태로 가공
+      const response = {
+        result: "false",
+      };
+      // 성공 시 결과 응답으로 전송
+      res.json(response);
+    }
+    else {
+      const query2 =
         "";
 
-    connection.query(query, userID, (err, results) => {
+      connection.query(query2, userinform, (err, results) => {
         if (err) {
           console.error("MySQL query error: ", err);
           res.status(500).json({ error: "Internal server error" });
           return;
         }
-    
-        if (results.length > 0) {
-          // 결과를 원하는 형태로 가공
-          const response = {
-            result: "false",
-          };
-          // 성공 시 결과 응답으로 전송
-          res.json(response);
-        } 
-        else {
-          const query2 =
-            "";
 
-        connection.query(query2, userinform, (err, results) => {
-        if (err) {
-          console.error("MySQL query error: ", err);
-          res.status(500).json({ error: "Internal server error" });
-          return;
-        }
-    
         if (results.length > 0) {
           // 결과를 원하는 형태로 가공
           const response = {
@@ -69,9 +69,9 @@ router.post("/", (req, res) => {
           };
           res.json(response);
         }
-    });
-        }
-    });
-    
+      });
+    }
+  });
+
 });
 module.exports = router;
