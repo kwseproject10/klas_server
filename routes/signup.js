@@ -4,23 +4,11 @@ const connection = require("../modules/mysql");
 
 // /signup
 router.post("/", (req, res) => {
-  // 쿼리 파라미터 추출
-    /*const userinform = {
-        "studentID" : req.body.studentID,
-        "password" : req.body.password,
-        "rePassword" : req.body.rePassword,
-        "name" : req.body.name,
-        "phoneNum1" : req.body.phoneNum1,
-        "phoneNum2" : req.body.phoneNum2,
-        "phoneNum3" : req.body.phoneNum3,
-        "birthYear" : req.body.birthYear,
-        "birthMonth" : req.body.birthMonth,
-        "birthDay" : req.body.birthDay,
-        "EmailID" : req.body.EmailID,
-        "EmailDomain" : req.body.EmailDomain,
-        "checkInformPolicy" : req.body.checkInformPolicy,
-    }*/
-    const userinform = req.body;
+    
+  const userID = {
+    studentID : req.studentID,
+  }  
+  const userinform = req.body;
 
   /* 회원가입 정보 보내면 회원가입 성공한지 반환
   {
@@ -38,10 +26,29 @@ router.post("/", (req, res) => {
             "EmailDomain" : "gmail.com",
             "checkInformPolicy" : "true"
 }*/
-    const query =
+    const query1 =
         "";
 
-    connection.query(query, [userinform], (err, results) => {
+    connection.query(query, userID, (err, results) => {
+        if (err) {
+          console.error("MySQL query error: ", err);
+          res.status(500).json({ error: "Internal server error" });
+          return;
+        }
+    
+        if (results.length > 0) {
+          // 결과를 원하는 형태로 가공
+          const response = {
+            result: "false",
+          };
+          // 성공 시 결과 응답으로 전송
+          res.json(response);
+        } 
+        else {
+          const query2 =
+            "";
+
+        connection.query(query2, userinform, (err, results) => {
         if (err) {
           console.error("MySQL query error: ", err);
           res.status(500).json({ error: "Internal server error" });
@@ -63,5 +70,8 @@ router.post("/", (req, res) => {
           res.json(response);
         }
     });
+        }
+    });
+    
 });
 module.exports = router;
