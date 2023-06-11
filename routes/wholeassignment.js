@@ -54,37 +54,51 @@ router.get("/", (req, res) => {
         due: "20"
       }
     ]*/
-    const query =
-        "";
+  const query =
+    "select e.studentID as userID,a.title,s.subjectName,a.startDate,a.endDate from enrollments as e join lectures as l on e.lecKey = l.lecKey join subjects as s on l.subjectID = s.subjectID join assignments as a on l.lecKey = a.lecKey where e.studentID = ?;";
 
-    connection.query(query, [userID],(err, results) => {
-        if (err) {
-          console.error("MySQL query error: ", err);
-          res.status(500).json({ error: "Internal server error" });
-          return;
-        }
-    
-        if (results.length > 0) {
-          // 결과를 원하는 형태로 가공
-          const formattedResults = results.map((row, index) => {
-            return {
-                key: index.toString(),
-                title: row.title,
-                subject: row.subject,
-                startDate: row.startDate,
-                endDate: row.endDate,
-                due: row.due,
-            };
-          });
-          // 성공 시 결과 응답으로 전송
-          res.json(formattedResults);
-        } else {
-          // 데이터가 없는 경우
-          const response = {
-            result: "false",
-          };
-          res.json(response);
-        }
-    });
+  // 현재 날짜를 얻기 위해 Date 객체를 사용
+  const currentDate = new Date();
+
+  // /wholeassignment?userID=*
+  connection.query(query, [userID], (err, results) => {
+    if (err) {
+      console.error("MySQL query error: ", err);
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+
+    if (results.length > 0) {
+      // 결과를 원하는 형태로 가공
+      const assignmentInfo = results.map((row, index) => {
+        const endDate = new Date(row.endDate);
+        const differenceInTime = endDate.getTime() - currentDate.getTime();
+        const differenceInDays = Math.ceil(
+          differenceInTime / (1000 * 60 * 60 * 24)
+        );
+
+        return {
+          key: index.toString(),
+          title: row.title,
+          subject: row.subjectName,
+          startDate: row.startDate,
+          endDate: row.endDate,
+          due: differenceInDays,
+        };
+      });
+
+      console.log(assignmentInfo);
+
+      // 성공 시 결과 응답으로 전송
+      res.json(assignmentInfo);
+    } else {
+      // 데이터가 없는 경우
+      const response = {
+        result: "false",
+      };
+
+      res.json(response);
+    }
+  });
 });
 module.exports = router;
