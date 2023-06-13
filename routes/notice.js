@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boTitle title, lecName subject,boFDate date from lectures l join boards b on l.lecKey = b.lecKey where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
+    "select boTitle title, lecName subject,boFDate date from lectures l join boards b on l.lecKey = b.lecKey and boType = 'notice' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
   /*
 title,subject,date
 NULL,대학영어,NULL
