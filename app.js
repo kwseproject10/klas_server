@@ -26,11 +26,11 @@ const noticeRouter = require("./routes/notice");
 const noticepostRouter = require("./routes/noticepost");
 const archiveRouter = require("./routes/archive");
 const archivepostRouter = require("./routes/archivepost");
+const assignmentRouter = require("./routes/assignment");
+const assignmentpostRouter = require("./routes/assignmentpost");
 
-const assignment = require("./routes/assignment");
-const assignmentpost = require("./routes/assignmentpost");
+const attendanceRouter = require("./routes/attendance");
 
-const attendance = require("./routes/attendance");
 const enrolllecture = require("./routes/enrolllecture");
 
 const signupRouter = require("./routes/signup");
@@ -72,11 +72,11 @@ app.use("/notice", noticeRouter);
 app.use("/noticepost", noticepostRouter);
 app.use("/archive", archiveRouter);
 app.use("/archivepost", archivepostRouter);
+app.use("/assignment", assignmentRouter);
+app.use("/assignmentpost", assignmentpostRouter);
 
-app.use("/assignment", assignment);
-app.use("/assignmentpost", assignmentpost);
+app.use("/attendance", attendanceRouter);
 
-app.use("/attendance", attendance);
 app.use("/enrolllecture", enrolllecture);
 
 app.use("/signup", signupRouter);

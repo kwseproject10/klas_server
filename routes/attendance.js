@@ -18,79 +18,41 @@ router.get("/", (req, res) => {
     lectureID = null;
   }
 
-  /*[유저 ID와 강의 ID 보내면 해당 유저의 해당 강의 출석 현황 반환 -> 강의 출석 현황을 배열로 보내야함
-        [
-            1,
-            0
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            0,
-            1
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            1,
-            1
-        ],
-        [
-            1,
-            1
-        ]
-]*/
+  // 테스트용 : 2020123456, H020-4-0846-1
   const query =
-    "";
+    "select clWeek,clNum,case when atState='attend' then 1 when atState='late' then 0.6 when atState='absence' then 0 end as attend from enrollments e join lectures l on e.lecKey = l.lecKey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join classes c on l.lecKey = c.lecKey join attendances a on c.clKey = a.clKey where e.userID=? and concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
+  /*
+clWeek,clNum,attend
+1,1,1
+1,2,0.6*/
 
+  // /attendance?userID=*&lectureID=*
   connection.query(query, [userID, lectureID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
       return;
     }
+
     if (results.length > 0) {
-      // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
-      const response = results.attendance;
-      res.json(response);
+      const attendInfo = [];
+
+      results.forEach((row) => {
+        const week = row.clWeek;
+
+        if (!attendInfo[week]) {
+          attendInfo[week] = [];
+        }
+
+        attendInfo[week].push(row.attend);
+      });
+
+      const modifiedAttendInfo = Object.values(attendInfo).filter(Boolean);
+
+      console.log(modifiedAttendInfo);
+      res.json(modifiedAttendInfo);
     } else {
-      // 로그인 실패
-      const response = {
-        result: "false",
-      };
-      res.json(response);
+      return res.json({ result: "false" });
     }
   });
 });

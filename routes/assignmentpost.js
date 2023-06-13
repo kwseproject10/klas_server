@@ -2,48 +2,47 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /noticepost?lectureID=*&assignmentID=*
+// /assignmentpost?lectureID=*&assignmentID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-    const lectureID = req.query.lectureID;
-    const assignmentID = req.query.assignmentID;
+  const lectureID = req.query.lectureID;
+  const archiveID = req.query.archiveID;
 
-    // Check if lectureID is NaN and set it to null
-    if (lectureID === "NULL") {
-        lectureID = null;
-    }
-    if (assignmentID === "NULL") {
-        assignmentID = null;
-    }
+  if (lectureID === "NULL") {
+    lectureID = null;
+  }
+  if (isNaN(archiveID)) {
+    archiveID = null;
+  }
 
-  /* 
-}*/
   const query =
-    "";
+    "select boTitle name, lecProf poster,boFDate postDate, boHit postHit,bfPath postfileURL,boCont postText from lectures l join boards b on l.lecKey = b.lecKey and boType='assignment' join boardfiles bf on b.boKey = bf.boKey where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=? and b.boKey=?";
+  /*
+name,poster,postDate,postHit,postfileURL,postText
+*/
 
-  connection.query(query, [lectureID, assignmentID], (err, results) => {
+  // /assignmentpost?lectureID=*&assignmentID=*
+  connection.query(query, [lectureID, archiveID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
       return;
     }
+
     if (results.length > 0) {
-      // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
-        const response = {
-            name: results[0].name,
-            poster: results[0].poser,
-            postDate: results[0].postDate,
-            postHit: results[0].postHit,
-            postfileURL: results[0].postfileURL,
-            postText: results[0].postText,
-        };
-        res.json(response);
+      const postInfo = {
+        name: results[0].name,
+        poster: results[0].poster,
+        postDate: results[0].postDate,
+        postHit: results[0].postHit,
+        postfileURL: results[0].postfileURL,
+        postText: results[0].postText,
+      };
+
+      console.log(postInfo);
+      res.json(postInfo);
     } else {
-      // 강의 찾기 실패
-        const response = {
-            result: "false",
-        };
-        res.json(response);
+      return res.json({ result: "false" });
     }
   });
 });

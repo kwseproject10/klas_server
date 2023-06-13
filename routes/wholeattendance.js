@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
+// /wholeattendance?userID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   let userID = parseInt(req.query.userID);
