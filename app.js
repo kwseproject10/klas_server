@@ -10,6 +10,7 @@ const cors = require("cors");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 // 요구 router 경로
+// GET
 const authRouter = require("./routes/auth");
 const loadlectureallRouter = require("./routes/loadlectureall");
 const userInformRouter = require("./routes/userInform");
@@ -28,11 +29,11 @@ const archiveRouter = require("./routes/archive");
 const archivepostRouter = require("./routes/archivepost");
 const assignmentRouter = require("./routes/assignment");
 const assignmentpostRouter = require("./routes/assignmentpost");
-
 const attendanceRouter = require("./routes/attendance");
 
 const enrolllecture = require("./routes/enrolllecture");
 
+//POST
 const signupRouter = require("./routes/signup");
 const updateuserinformRouter = require("./routes/updateuserinform");
 // express 객체 생성
@@ -56,6 +57,7 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 // 요구 router 등록
+// GET
 app.use("/auth", authRouter);
 app.use("/loadlectureall", loadlectureallRouter);
 app.use("/userInform", userInformRouter);
@@ -74,13 +76,14 @@ app.use("/archive", archiveRouter);
 app.use("/archivepost", archivepostRouter);
 app.use("/assignment", assignmentRouter);
 app.use("/assignmentpost", assignmentpostRouter);
-
 app.use("/attendance", attendanceRouter);
 
 app.use("/enrolllecture", enrolllecture);
 
+//POST
 app.use("/signup", signupRouter);
 app.use("/updateuserinform", updateuserinformRouter);
+
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -2,16 +2,8 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /signup
-router.post("/", (req, res) => {
-
-  const userID = {
-    studentID: req.body.studentID,
-  }
-  const userinform = req.body;
-
-  /* 회원가입 정보 보내면 회원가입 성공한지 반환
-  {
+/*
+{
             "studentID" : "2020123456",
             "password" : "**123123",
             "rePassword" : "**123123",
@@ -26,52 +18,37 @@ router.post("/", (req, res) => {
             "EmailDomain" : "gmail.com",
             "checkInformPolicy" : "true"
 }*/
-  const query1 =
-    "";
 
-  connection.query(query, userID, (err, results) => {
+// /signup
+router.post("/", (req, res) => {
+  const data = req.body;
+
+  const query1 = "select * from users where userID=?";
+  const query2 = "";
+
+  //
+  connection.query(query1, data.studentID, (error, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
       return;
-    }
-
-    if (results.length > 0) {
-      // 결과를 원하는 형태로 가공
-      const response = {
-        result: "false",
-      };
-      // 성공 시 결과 응답으로 전송
-      res.json(response);
-    }
-    else {
-      const query2 =
-        "";
-
-      connection.query(query2, userinform, (err, results) => {
-        if (err) {
-          console.error("MySQL query error: ", err);
-          res.status(500).json({ error: "Internal server error" });
-          return;
-        }
-
-        if (results.length > 0) {
-          // 결과를 원하는 형태로 가공
-          const response = {
-            result: "true",
-          };
-          // 성공 시 결과 응답으로 전송
-          res.json(response);
-        } else {
-          // 데이터가 없는 경우
-          const response = {
-            result: "false",
-          };
-          res.json(response);
-        }
-      });
+    } else {
+      if (results.length > 0) {
+        // 이미 존재하는 학생 ID인 경우
+        console.log("이미 존재하는 학생 ID입니다.");
+        res.json({ result: false });
+      } else {
+        connection.query(query2, data, (error, results) => {
+          if (error) {
+            console.error("MySQL 저장 실패:", error);
+            res.json({ result: false });
+          } else {
+            console.log("MySQL 저장 성공:", results);
+            res.json({ result: true });
+          }
+        });
+      }
     }
   });
-
 });
 module.exports = router;
