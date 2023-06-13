@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /lectures?userID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   const userID = parseInt(req.query.userID);
@@ -14,10 +13,13 @@ router.get("/", (req, res) => {
 
   // [유저 ID 보내면 이번 학기 수강 중인 lecture list 반환
   const query =
-    "select l.majorID,l.lecLevel,l.subjectID,l.class,s.subjectName as lecName,l.lecProfessor as professor,m.majorName as major,l.category as lecType,l.credit,l.lecHour as numofTime,l.lecTime,l.place from enrollments as e join lectures as l on e.lecKey = l.lecKey join subjects as s on l.subjectID = s.subjectID join majors as m on l.majorID=m.majorID where e.studentID = 2017202030;";
-  // majorID,lecLevel,subjectID,class,lecName,professor,major,lecType,credit,numofTime,lecTime,place
-  // H020,4,8995,1,산학협력캡스톤설계1,이형근,컴퓨터정보공학부,전선,3,3,화6.목5,NULL
+    "select lecName,lecProf professor,majName major,lecType,lecCre credit,lecHour numOfTime, lecTime,lecRm place,concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) as ID from enrollments e join lectures l on e.lecKey = l.lecKey join majors as m on l.majID=m.majID where e.userID = ?";
+  /*
+lecName,professor,major,lecType,credit,numOfTime,lecTime,place,ID
+대학영어,김지희,소프트웨어융합대학,교필,3,3,금3.4,새빛205,H000-1-3362-9
+대학물리및실험2,나영호,소프트웨어융합대학,기필,3,4,수2.금1.2,새빛205,H000-1-3416-3*/
 
+  // /lectures?userID=*
   connection.query(query, [userID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
@@ -28,8 +30,24 @@ router.get("/", (req, res) => {
     if (results.length > 0) {
       // 결과를 원하는 형태로 가공
       const enrollInfo = results.map((row, index) => {
-        let professors = row.place ? row.place.split(".") : [];
+        let professors = row.professor ? row.place.split(".") : [];
         let times = row.lecTime ? row.lecTime.split(".") : [];
+        let places = [row.place, row.place];
+        let weekday;
+        for (let i = 0; i < times.length; i++) {
+          if (
+            times[i].charAt(0) === "월" ||
+            times[i].charAt(0) === "화" ||
+            times[i].charAt(0) === "수" ||
+            times[i].charAt(0) === "목" ||
+            times[i].charAt(0) === "금" ||
+            times[i].charAt(0) === "토"
+          ) {
+            weekday = times[i].charAt(0);
+          } else {
+            times[i] = weekday + times[i];
+          }
+        }
 
         return {
           key: index.toString(),
@@ -38,12 +56,12 @@ router.get("/", (req, res) => {
           major: row.major,
           type: row.lecType,
           credit: row.credit.toString(),
-          numOfTime: row.numofTime.toString(),
+          numOfTime: row.numOfTime.toString(),
 
           time: times,
-          place: row.place,
+          place: places,
 
-          ID: `${row.majorID}-${row.lecLevel}-${row.subjectID}-${row.class}`,
+          ID: row.ID,
         };
       });
 
