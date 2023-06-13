@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boTitle, lecName, boFDate from enrollments e join lectures l on e.leckey = l.leckey join boards b on l.lecKey = b.lecKey and b.boType = 'notice' where  e.userID = ?;";
+    "select boTitle, lecName, boFDate from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and b.boType = 'notice' where  e.userID = ?;";
   /*
 boTitle,lecName,boFDate
 */

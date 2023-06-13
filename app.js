@@ -9,7 +9,7 @@ const cors = require("cors");
 // routes 소스 가져옴
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-// 밑에서부터 내가 만들은 라우터들
+// 요구 router 경로
 const authRouter = require("./routes/auth");
 const loadlectureallRouter = require("./routes/loadlectureall");
 const userInformRouter = require("./routes/userInform");
@@ -19,9 +19,9 @@ const creditRouter = require("./routes/credit");
 const wholelectureRouter = require("./routes/wholelecture");
 const lecturesRouter = require("./routes/lectures");
 const wholeattendanceRouter = require("./routes/wholeattendance");
-
 const wholenoticeRouter = require("./routes/wholenotice");
 const wholeassignmentRouter = require("./routes/wholeassignment");
+
 const syllabusRouter = require("./routes/syllabus");
 const noticeRouter = require("./routes/notice");
 
@@ -56,7 +56,7 @@ app.use(cors());
 // 해당 경로로 router 등록
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-// 밑에서부터 내가 만들은 라우터들
+// 요구 router 등록
 app.use("/auth", authRouter);
 app.use("/loadlectureall", loadlectureallRouter);
 app.use("/userInform", userInformRouter);
@@ -66,9 +66,9 @@ app.use("/credit", creditRouter);
 app.use("/wholelecture", wholelectureRouter);
 app.use("/lectures", lecturesRouter);
 app.use("/wholeattendance", wholeattendanceRouter);
-
 app.use("/wholenotice", wholenoticeRouter);
 app.use("/wholeassignment", wholeassignmentRouter);
+
 app.use("/syllabus", syllabusRouter);
 app.use("/notice", noticeRouter);
 
