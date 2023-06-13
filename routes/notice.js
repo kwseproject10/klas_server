@@ -13,11 +13,13 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select b.title,su.subjectName,b.boardDate from lectures as l left join subjects as su on l.subjectID = su.subjectID left join boards as b on l.lecKey = b.lecKey left join users as u on l.lecProfessor= u.userName where concat(l.majorID,'-',l.lecLevel,'-',l.subjectID,'-',l.class) = ?;";
+    "select boTitle title, lecName subject,boFDate date from lectures l join boards b on l.lecKey = b.lecKey where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
   /*
-title,subjectName,boardDate
-NULL,융합적사고와글쓰기,NULL
+title,subject,date
+NULL,대학영어,NULL
+NULL,대학영어,NULL
 */
+
   // /notice?lectureID=*
   connection.query(query, [lectureID], (err, results) => {
     if (err) {
@@ -32,23 +34,18 @@ NULL,융합적사고와글쓰기,NULL
         return {
           key: index.toString(),
           title: row.title,
-          subject: row.subjectName,
-          date: row.boardDate,
+          subject: row.subject,
+          date: row.date,
         };
       });
 
       console.log(noticeList);
 
-      // 성공 시 결과 응답으로 전송
       res.json(noticeList);
     } else {
-      // 데이터가 없는 경우
-      const response = {
-        result: "false",
-      };
-
-      res.json(response);
+      return res.json({ result: "false" });
     }
   });
 });
+
 module.exports = router;
