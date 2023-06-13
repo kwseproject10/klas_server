@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select b.title, s.subjectName as lecName, b.boardDate as noticeDate from enrollments as e left join boards as b on e.lecKey = b.lecKey join lectures as l on e.leckey = l.leckey join subjects as s on l.subjectID = s.subjectID where b.boardType='notice' and e.studentID = ?;";
+    "select boTitle, lecName, boFDate from enrollments e join lectures l on e.leckey = l.leckey join boards b on l.lecKey = b.lecKey and b.boType = 'notice' where  e.userID = ?;";
 
   connection.query(query, [userID], (err, results) => {
     if (err) {

@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
 
   // [유저 ID 보내면 이번 학기 수강 중인 lecture list 반환
   const query =
-    "select lecName,lecProf professor,majName major,lecType,lecCre credit,lecHour numOfTime, lecTime,lecRm place,concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) as ID from enrollments e join lectures l on e.lecKey = l.lecKey join majors as m on l.majID=m.majID where e.userID = ?";
+    "select lecName,lecProf professor,majName major,lecType,lecCre credit,lecHour numOfTime, lecTime,lecRm place,concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) as ID from enrollments e join lectures l on e.lecKey = l.lecKey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join majors as m on l.majID=m.majID where e.userID = ?";
   /*
 lecName,professor,major,lecType,credit,numOfTime,lecTime,place,ID
 대학영어,김지희,소프트웨어융합대학,교필,3,3,금3.4,새빛205,H000-1-3362-9
