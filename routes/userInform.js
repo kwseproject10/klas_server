@@ -42,10 +42,11 @@ userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorE
 
     if (results.length > 0) {
       const result = results[0];
-      const grade =
-        result.numberOfTerm / 2 == 0
-          ? result.numberOfTerm / 2 + 1
-          : result.numberOfTerm / 2;
+
+      console.log(result);
+      console.log(result.numberOfTerm);
+
+      const grade = Math.ceil(result.numberOfTerm / 2);
 
       const dateString = result.birthday;
 
@@ -56,7 +57,7 @@ userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorE
         type: result.userType !== null ? result.userType : null,
         major: result.major !== null ? result.major : null,
         ID: result.ID !== null ? result.ID : null,
-        grade: grade !== null ? result.grade : null,
+        grade: grade !== null ? grade : null,
         numberOfTerm: result.numberOfTerm !== null ? result.numberOfTerm : null,
         email: result.email !== null ? result.email : null,
         phoneNum: result.phoneNum !== null ? result.phoneNum : null,
