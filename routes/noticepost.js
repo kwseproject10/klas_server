@@ -2,16 +2,24 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
+// /noticepost?lectureID=*&noticeID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   const lectureID = req.query.lectureID;
+  const noticeID = req.query.noticeID;
 
-  // Check if lectureID is NaN and set it to null
   if (lectureID === "NULL") {
     lectureID = null;
   }
+  if (isNaN(noticeID)) {
+    noticeID = null;
+  }
 
-  const query = "";
+  const query =
+    "select boTitle name, lecProf poster,boFDate postDate, boHit postHit,bfPath postfileURL,boCont postText from lectures l join boards b on l.lecKey = b.lecKey and boType='notice' join boardfiles bf on b.boKey = bf.boKey where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=? and b.boKey=?";
+  /*
+name,poster,postDate,postHit,postfileURL,postText
+*/
 
   // /noticepost?lectureID=*&noticeID=*
   connection.query(query, [lectureID, noticeID], (err, results) => {
@@ -20,23 +28,21 @@ router.get("/", (req, res) => {
       res.status(500).json({ error: "Internal server error" });
       return;
     }
+
     if (results.length > 0) {
-      // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
-      const response = {
+      const postInfo = {
         name: results[0].name,
-        poster: results[0].poser,
+        poster: results[0].poster,
         postDate: results[0].postDate,
         postHit: results[0].postHit,
         postfileURL: results[0].postfileURL,
         postText: results[0].postText,
       };
-      res.json(response);
+
+      console.log(postInfo);
+      res.json(postInfo);
     } else {
-      // 강의 찾기 실패
-      const response = {
-        result: "false",
-      };
-      res.json(response);
+      return res.json({ result: "false" });
     }
   });
 });

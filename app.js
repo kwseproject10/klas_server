@@ -22,10 +22,9 @@ const wholeattendanceRouter = require("./routes/wholeattendance");
 const wholenoticeRouter = require("./routes/wholenotice");
 const wholeassignmentRouter = require("./routes/wholeassignment");
 const syllabusRouter = require("./routes/syllabus");
-
 const noticeRouter = require("./routes/notice");
+const noticepostRouter = require("./routes/noticepost");
 
-const noticepost = require("./routes/noticepost");
 const archive = require("./routes/archive");
 const archivepost = require("./routes/archivepost");
 const assignment = require("./routes/assignment");
@@ -69,10 +68,9 @@ app.use("/wholeattendance", wholeattendanceRouter);
 app.use("/wholenotice", wholenoticeRouter);
 app.use("/wholeassignment", wholeassignmentRouter);
 app.use("/syllabus", syllabusRouter);
-
 app.use("/notice", noticeRouter);
+app.use("/noticepost", noticepostRouter);
 
-app.use("/noticepost", noticepost);
 app.use("/archive", archive);
 app.use("/archivepost", archivepost);
 app.use("/assignment", assignment);
