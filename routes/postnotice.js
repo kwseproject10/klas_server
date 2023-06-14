@@ -7,17 +7,7 @@ router.post("/", (req, res) => {
 
     const notice = req.body;
 
-    /* 공지사항 게시물 작성
-    {
-      name: "중간고사 결과 공지",
-      poster: "박철수",
-      postDate: "2020.06.08(목) 20:32",
-      postHit: "10",
-      postfileURL: "http://...",
-      postText: `중간고사 결과를 첨부와 같이 공지 합니다. 
-
-이의신청은 6월 7일 수요일 오전 9시~9시 50분 사이에 915호에서 진행됩니다. `,
-}*/
+    /* 공지사항 게시물 작성*/
     const query =
         "";
 
