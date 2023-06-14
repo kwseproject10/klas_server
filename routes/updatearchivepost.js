@@ -6,14 +6,14 @@ const connection = require("../modules/mysql");
 router.post("/", (req, res) => {
     const data = req.body;
 
-    /* 공지사항 게시물 작성
-공지사항 ID로 공지사항이 있는지 확인????*/
+    /* 자료실 게시물 수정
+게시물 ID로 확인????*/
     const query1 =
         "";
     const query2 = "";
 
     //
-    connection.query(query1, data.noticeID, (error, results) => {
+    connection.query(query1, data.archiveID, (error, results) => {
         if (err) {
             console.error("MySQL query error: ", err);
             res.status(500).json({ error: "Internal server error" });
@@ -21,7 +21,7 @@ router.post("/", (req, res) => {
         } else {
             if (results.length > 0) {
                 // 이미 존재하는 notice ID인 경우
-                console.log("이미 존재하는 공지사항 ID입니다.");
+                console.log("이미 존재하는 게시물 ID입니다.");
                 res.json({ result: false });
             } else {
                 connection.query(query2, data, (error, results) => {

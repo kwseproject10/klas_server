@@ -7,7 +7,7 @@ router.post("/", (req, res) => {
 
     const data = req.body;
 
-    /* 공지사항 게시물 작성*/
+    /* 자료실 게시물 작성*/
     const query =
         "";
 
