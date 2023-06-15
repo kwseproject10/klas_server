@@ -54,7 +54,7 @@ clWeek,clNum,attend
     } else {
       console.log("attendance Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });
