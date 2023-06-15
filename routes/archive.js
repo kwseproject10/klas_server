@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boTitle title, lecName subject,boFDate date from lectures l join boards b on l.lecKey = b.lecKey and boType = 'download' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
+    "select boKey, boTitle title, lecName subject,boFDate date ,boHit hit, boPoster poster from lectures l join boards b on l.lecKey = b.lecKey and boType = 'download' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=? order by date desc";
   /*
 title,subject,date
 NULL,대학영어,NULL
@@ -32,10 +32,12 @@ NULL,대학영어,NULL
       // 결과를 원하는 형태로 가공
       const noticeList = results.map((row, index) => {
         return {
-          key: index.toString(),
+          key: row.boKey,
           title: row.title,
           subject: row.subject,
           date: row.date,
+          hit: row.hit,
+          poster: row.poster,
         };
       });
 
@@ -45,7 +47,7 @@ NULL,대학영어,NULL
     } else {
       console.log("archive Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });
