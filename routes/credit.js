@@ -197,7 +197,15 @@ lecYear,semester,lecType,lecCre,enCre
         } else {
           console.log("credit Fail : No Data");
 
-          return res.json([]);
+          return res.json({
+            userCredit: {},
+            creditForGrad: {
+              major: null,
+              general: null,
+              etc: null,
+              total: null,
+            },
+          });
         }
       });
     } else {

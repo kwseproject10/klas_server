@@ -60,7 +60,21 @@ userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorE
     } else {
       console.log("userInform Fail");
 
-      return res.json([]);
+      return res.json({
+        name: null,
+        type: null,
+        major: null,
+        ID: null,
+        grade: null,
+        numberOfTerm: null,
+        email: null,
+        phoneNum: null,
+        birthday: null,
+        advisor: null,
+        advisorEmail: null,
+        advisorNum: null,
+        state: null,
+      });
     }
   });
 });
