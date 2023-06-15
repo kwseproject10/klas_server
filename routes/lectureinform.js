@@ -52,7 +52,7 @@ router.get("/", (req, res) => {
                 if(part === "월" ||part === "화" ||part === "수" ||part === "목" ||part === "금"){
                     day = part;
                 }else if(part === ","){
-                }else{
+                }else if(part != ""){
                     num = part;
                     time.push(day + num);
                 }
