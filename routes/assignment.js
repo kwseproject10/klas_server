@@ -13,11 +13,6 @@ router.get("/", (req, res) => {
 
   const query =
     "select boKey,boTitle title, lecName subject,asSDate startDate, asEDate endDate from lectures l join boards b on l.lecKey = b.lecKey and boType = 'assignment' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
-  /*
-title,subject,date
-NULL,대학영어,NULL
-NULL,대학영어,NULL
-*/
 
   // /assignment?lectureID=*
   connection.query(query, [lectureID], (err, results) => {
@@ -28,12 +23,13 @@ NULL,대학영어,NULL
     }
 
     if (results.length > 0) {
-      const today = new Date();
-      const timeDiff = new Date(results[0].endDate).getTime() - today.getTime();
-      const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
       // 결과를 원하는 형태로 가공
       const noticeList = results.map((row, index) => {
+        const today = new Date();
+        const endDate = new Date(row.endDate);
+        const timeDiff = endDate.getTime() - today.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
         return {
           key: row.boKey,
           title: row.title,

@@ -5,10 +5,9 @@ const connection = require("../modules/mysql");
 // /wholeassignment?userID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const userID = parseInt(req.query.userID);
+  const userID = req.query.userID;
 
-  // Check if userID is NaN and set it to null
-  if (isNaN(userID)) {
+  if (userID === "NULL") {
     userID = null;
   }
 
@@ -27,12 +26,13 @@ title,subject,startDate,endDate,due
     }
 
     if (results.length > 0) {
-      const today = new Date();
-      const timeDiff = new Date(results[0].endDate).getTime() - today.getTime();
-      const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
       // 결과를 원하는 형태로 가공
       const assignmentInfo = results.map((row, index) => {
+        const today = new Date();
+        const endDate = new Date(row.endDate);
+        const timeDiff = endDate.getTime() - today.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
         return {
           key: row.boKey,
           title: row.title,
