@@ -20,8 +20,7 @@ router.post("/", (req, res) => {
             return;
         } else {
             if (results.length > 0) {
-                // 이미 존재하는 notice ID인 경우
-                console.log("이미 존재하는 게시물 ID입니다.");
+                console.log("존재하지 않는 게시물 ID 입니다.");
                 res.json({ result: false });
             } else {
                 connection.query(query2, data, (error, results) => {
