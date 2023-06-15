@@ -37,6 +37,8 @@ const assignmentnotsubmittedRouter = require("./routes/assignmentnotsubmitted");
 const assignmentpostRouter = require("./routes/assignmentpost");
 const attendanceRouter = require("./routes/attendance");
 
+const lecturelastboardRouter = require("./routes/lecturelastboard");
+
 //POST
 const signupRouter = require("./routes/signup");
 const updateuserinformRouter = require("./routes/updateuserinform");
@@ -97,6 +99,8 @@ app.use("/assignment", assignmentRouter);
 app.use("/assignmentnotsubmitted", assignmentnotsubmittedRouter);
 app.use("/assignmentpost", assignmentpostRouter);
 app.use("/attendance", attendanceRouter);
+
+app.use("/lecturelastboard", lecturelastboardRouter);
 
 //POST
 app.use("/signup", signupRouter);
