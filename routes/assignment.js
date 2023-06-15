@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boKey key,boTitle title, lecName subject,boFDate date from lectures l join boards b on l.lecKey = b.lecKey and boType = 'assignment' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
+    "select boKey,boTitle title, lecName subject,asSDate startDate, asEDate endDate from lectures l join boards b on l.lecKey = b.lecKey and boType = 'assignment' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
   /*
 title,subject,date
 NULL,대학영어,NULL
@@ -28,13 +28,19 @@ NULL,대학영어,NULL
     }
 
     if (results.length > 0) {
+      const today = new Date();
+      const timeDiff = row.endDate.getTime() - today.getTime();
+      const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
       // 결과를 원하는 형태로 가공
       const noticeList = results.map((row, index) => {
         return {
-          key: row.key,
+          key: row.boKey,
           title: row.title,
           subject: row.subject,
-          date: row.date,
+          startDate: row.startDate,
+          endDate: row.endDate,
+          due: daysDiff,
         };
       });
 
