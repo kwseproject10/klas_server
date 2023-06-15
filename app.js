@@ -6,6 +6,8 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 // routes 소스 가져옴
 var indexRouter = require("./routes/index");
