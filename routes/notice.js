@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boKey, boTitle title, lecName subject,boFDate date ,boHit hit, boPoster poster from lectures l join boards b on l.lecKey = b.lecKey and boType = 'notice' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
+    "select boKey, boTitle title, lecName subject,boFDate date ,boHit hit, boPoster poster from lectures l join boards b on l.lecKey = b.lecKey and boType = 'notice' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=? order by date desc";
   /*
 boKey,title,subject,date,hit,poster
 1,"Zoom 링크",소프트웨어공학,"2023-04-28 12:13:00",38,김상호
@@ -48,7 +48,7 @@ boKey,title,subject,date,hit,poster
     } else {
       console.log("notice Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });

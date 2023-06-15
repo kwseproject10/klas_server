@@ -12,9 +12,10 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boTitle, lecName, boFDate from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and b.boType = 'notice' where  e.userID = ?;";
+    "select boKey,boTitle title,lecName subject,boFDate date,boHit hit from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and b.boType = 'notice' where e.userID = ?";
   /*
-boTitle,lecName,boFDate
+boKey,title,subject,date,hit
+1,"Zoom 링크",소프트웨어공학,"2023-04-28 12:13:00",38
 */
 
   // /wholenotice?userID=*
@@ -29,10 +30,11 @@ boTitle,lecName,boFDate
       // 결과를 원하는 형태로 가공
       const noticeInfo = results.map((row, index) => {
         return {
-          key: index.toString(),
+          key: row.boKey || null,
           title: row.title || null,
-          subject: row.lecName || null,
-          date: row.noticeDate || null,
+          subject: row.subject || null,
+          date: row.date || null,
+          hit: row.hit || null,
         };
       });
 
@@ -42,7 +44,7 @@ boTitle,lecName,boFDate
     } else {
       console.log("wholenotice Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });
