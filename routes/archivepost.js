@@ -2,27 +2,23 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /archivepost?lectureID=*&noticeID=*
+// /archivepost?noticeID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const lectureID = req.query.lectureID;
   const noticeID = req.query.noticeID;
 
-  if (lectureID === "NULL") {
-    lectureID = null;
-  }
-  if (isNaN(noticeID)) {
+  if (noticeID === "NULL") {
     noticeID = null;
   }
 
   const query =
-    "select boTitle name, lecProf poster,boFDate postDate, boHit postHit,bfPath postfileURL,boCont postText from lectures l join boards b on l.lecKey = b.lecKey and boType='download' join boardfiles bf on b.boKey = bf.boKey where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=? and b.boKey=?";
+    "select boTitle name, boPoster poster,boFDate postDate, boHit postHit,bfPath postfileURL,boCont postText from boards b left join boardfiles bf on b.boKey = bf.boKey where boType='download' and b.bokey=?";
   /*
 name,poster,postDate,postHit,postfileURL,postText
 */
 
-  // /archivepost?lectureID=*&noticeID=*
-  connection.query(query, [lectureID, noticeID], (err, results) => {
+  // /archivepost?noticeID=*
+  connection.query(query, [noticeID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
@@ -44,7 +40,7 @@ name,poster,postDate,postHit,postfileURL,postText
     } else {
       console.log("archivepost Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });

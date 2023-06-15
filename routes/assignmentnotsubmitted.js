@@ -2,25 +2,24 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /assignment?lectureID=*
+// /wholeassignment?userID=*
 router.get("/", (req, res) => {
-  const lectureID = req.query.lectureID;
+  // 쿼리 파라미터 추출
+  const userID = parseInt(req.query.userID);
 
-  // Check if lectureID is NaN and set it to null
-  if (lectureID === "NULL") {
-    lectureID = null;
+  // Check if userID is NaN and set it to null
+  if (isNaN(userID)) {
+    userID = null;
   }
 
   const query =
-    "select boKey,boTitle title, lecName subject,boFDate date from lectures l join boards b on l.lecKey = b.lecKey and boType = 'assignment' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
+    "select b.boKey,boTitle title,lecName subject,asSDate startDate,asEDate endDate from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and boType = 'assignment' left join submits s on b.boKey = s.boKey and s.smDone != 1 where e.userID = ? order by asSDate desc";
   /*
-title,subject,date
-NULL,대학영어,NULL
-NULL,대학영어,NULL
+title,subject,startDate,endDate,due
 */
 
-  // /assignment?lectureID=*
-  connection.query(query, [lectureID], (err, results) => {
+  // /wholeassignment?userID=*
+  connection.query(query, [userID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
@@ -28,23 +27,29 @@ NULL,대학영어,NULL
     }
 
     if (results.length > 0) {
+      const today = new Date();
+      const timeDiff = new Date(results[0].endDate).getTime() - today.getTime();
+      const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
       // 결과를 원하는 형태로 가공
-      const noticeList = results.map((row, index) => {
+      const assignmentInfo = results.map((row, index) => {
         return {
-          key: index.toString(),
+          key: row.boKey,
           title: row.title,
           subject: row.subject,
-          date: row.date,
+          startDate: row.startDate,
+          endDate: row.endDate,
+          due: daysDiff,
         };
       });
 
-      console.log(noticeList);
+      console.log(assignmentInfo); // 콘솔
 
-      res.json(noticeList);
+      res.json(assignmentInfo); // 성공
     } else {
-      console.log("assignmnet Fail");
+      console.log("wholeassignment Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });
