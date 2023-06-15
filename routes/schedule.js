@@ -61,25 +61,29 @@ router.get("/", (req, res) => {
         }
         temp.setDate(2023, 2, 5);
         for (; temp != enddate1 && temp != enddate2;) {
-          if (temp.getDay() === dateNum(day)) {
-            let day = "";
-            let time = "";
-            for (let i = 0; i < length; i++) {
-              
-              formattedResults.push({
-                'key': index.toString(),
-                'title': row.title || null,
-                'subject': row.subject || null,
-                'date': temp.getDate() || null,
-                'time': timeConv(time1) || null,
-              });
+          let day = "";
+          let time = "";
+          for (let i = 0; i < length; i++) {
+            if (line[i] === "월" || line[i] === "화" || line[i] === "수" || line[i] === "목" || line[i] === "금") {
+              day = line[i];
+              time = "";
             }
-            index++;
-            temp.setDate(temp.getDate() + 1);
+            else {
+              time = line[i];
+              if (temp.getDay() === dateNum(day)) {
+                formattedResults.push({
+                  'key': index.toString(),
+                  'title': row.title,
+                  'subject': row.subject,
+                  'date': temp.getDate().toString(),
+                  'time': timeConv(time),
+                });
+                index++;
+              }
+            }
           }
+          temp.setDate(temp.getDate() + 1);
         }
-
-
       });
       // 성공 시 결과 응답으로 전송
       res.json(formattedResults);
