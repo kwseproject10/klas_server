@@ -65,14 +65,14 @@ lecName,professor,major,lecType,credit,numOfTime,lecTime,place,ID
         };
       });
 
-      console.log(enrollInfo);
+      console.log("lectures success");
 
       // 성공 시 결과 응답으로 전송
       return res.json(enrollInfo);
     } else {
       console.log("lectures Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });

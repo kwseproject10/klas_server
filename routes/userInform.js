@@ -55,7 +55,7 @@ userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorE
         state: result.state || null,
       };
 
-      console.log(response);
+      console.log("userinform success");
 
       return res.json(response);
     } else {

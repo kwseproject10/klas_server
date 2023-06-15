@@ -41,7 +41,7 @@ userID,pw,userType
         userType: results[0].userType,
       };
 
-      console.log(authSuccess);
+      console.log("authSuccess");
 
       return res.json(authSuccess);
     } else {
