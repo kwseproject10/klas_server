@@ -5,14 +5,14 @@ const connection = require("../modules/mysql");
 // /assignmentpost?lectureID=*&assignmentID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const lectureID = req.query.lectureID;
-  const archiveID = req.query.archiveID;
+  let lectureID = req.query.lectureID;
+  let assignmentID = req.query.assignmentID;
 
   if (lectureID === "NULL") {
     lectureID = null;
   }
-  if (isNaN(archiveID)) {
-    archiveID = null;
+  if (isNaN(assignmentID)) {
+    assignmentID = null;
   }
 
   const query =
@@ -22,7 +22,7 @@ name,poster,postDate,postHit,postfileURL,postText
 */
 
   // /assignmentpost?lectureID=*&assignmentID=*
-  connection.query(query, [lectureID, archiveID], (err, results) => {
+  connection.query(query, [lectureID, assignmentID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
@@ -42,6 +42,8 @@ name,poster,postDate,postHit,postfileURL,postText
       console.log(postInfo);
       res.json(postInfo);
     } else {
+      console.log("assignmentpost Fail");
+
       return res.json({ result: "false" });
     }
   });

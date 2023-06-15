@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
   }
 
   const query1 =
-    "select creMaj,creGen,creEtc,creTot from users as u join majreqs as mr on u.majID = mr.majID where userID = ?";
+    "select creMaj,creGen,creEtc,creTot from users u join majors m on u.majID = m.majID where userID = ?";
   /*
 creMaj,creGen,creEtc,creTot
 60,0,0,133
@@ -195,21 +195,15 @@ lecYear,semester,lecType,lecCre,enCre
 
           return res.json(success);
         } else {
-          // 데이터가 없는 경우
-          const fail = {
-            result: "false",
-          };
+          console.log("credit Fail : No Data");
 
-          return res.json(fail);
+          return res.json({ result: "false" });
         }
       });
     } else {
-      // 데이터가 없는 경우
-      const fail = {
-        result: "false",
-      };
+      console.log("credit Fail");
 
-      return res.json(fail);
+      return res.json({ result: "false" });
     }
   });
 });

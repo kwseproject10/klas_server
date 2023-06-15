@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select lecYear,lecSem semester,lecName,lecProf professor,tel professorPhone,email professorEmail,majName major,lecType,lecCre credit,lecHour numOFTime,lecTime,lecRm place,concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) ID,tbTitle,tbAuth,tbPubl,lecDesc,ratAtten,ratMid,ratFin,ratAss,ratAttit,ratQuiz,ratEtc from lectures l left join users u on l.lecProf = u.userName join majors m on l.majID = m.majID where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) = ?";
+    "select lecYear,lecSem semester,lecName,lecProf professor,tel professorPhone,email professorEmail,majName major,lecType,lecCre credit,lecHour numOFTime,lecTime,lecRm place,concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) ID,tbTitle,tbAuth,tbPubl,lecDesc,ratAtten,ratMid,ratFin,ratAss,ratAttit,ratQuiz,ratEtc from lectures l left join users u on l.lecProf = u.userName join majors m on l.majID = m.majID where YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem and concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) = ?";
   /*
 lecYear,semester,lecName,professor,professorPhone,professorEmail,major,lecType,credit,numOFTime,lecTime,place,ID,tbTitle,tbAuth,tbPubl,lecDesc,ratAtten,ratMid,ratFin,ratAss,ratAttit,ratQuiz,ratEtc
 2020,2,대학영어,이종국,NULL,NULL,소프트웨어융합대학,교필,3,3,월1.수2,새빛205,H000-1-3362-1,제목,저자,출판사,"이론(짝수 주 대면)",0,0,0,0,0,0,0
@@ -82,7 +82,9 @@ lecYear,semester,lecName,professor,professorPhone,professorEmail,major,lecType,c
 
       return res.json(lecDetail); // 성공
     } else {
-      return res.json({ result: "false" }); // 실패
+      console.log("syllabus Fail");
+
+      return res.json({ result: "false" });
     }
   });
 });

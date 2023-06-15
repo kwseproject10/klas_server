@@ -58,7 +58,8 @@ lecYear,semester,ID,title,major,lecType,credit,grade
 
       return res.json(lecInfo);
     } else {
-      // 데이터가 없는 경우
+      console.log("wholelecture Fail");
+
       return res.json({ result: "false" });
     }
   });

@@ -43,6 +43,8 @@ NULL,대학영어,NULL
 
       res.json(noticeList);
     } else {
+      console.log("archive Fail");
+
       return res.json({ result: "false" });
     }
   });

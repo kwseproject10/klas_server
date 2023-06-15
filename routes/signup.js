@@ -61,7 +61,7 @@ router.post("/", (req, res) => {
               const birth = `${data.birthYear}-${bMonth}-${bDay}`;
 
               const query3 =
-                "INSERT INTO klas_db.users (userID, pw, userName, userType, majID, email, phone, birth) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "INSERT INTO klas_db.users (userID, pw,userName,userType,majID,phone,birth,email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
               connection.query(
                 query3,
@@ -71,9 +71,9 @@ router.post("/", (req, res) => {
                   data.userName,
                   data.type,
                   majID,
-                  email,
                   phone,
                   birth,
+                  email,
                 ],
                 (error, result3) => {
                   if (error) {
@@ -98,4 +98,5 @@ router.post("/", (req, res) => {
     }
   });
 });
+
 module.exports = router;

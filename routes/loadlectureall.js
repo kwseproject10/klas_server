@@ -25,16 +25,16 @@ H000-1-3362-2,대학영어,소프트웨어융합대학,교필,3,3,에이미,월2
       const lecInfo = results.map((row, index) => {
         return {
           key: index.toString(),
-          ID: row.ID !== null ? row.ID : null,
-          name: row.lecName !== null ? row.lecName : null,
-          major: row.majName !== null ? row.majName : null,
-          type: row.lecType !== null ? row.lecType : null,
-          credit: row.lecCre !== null ? row.lecCre : null,
-          numOfTime: row.lecHour !== null ? row.lecHour : null,
+          ID: row.ID || null,
+          name: row.lecName || null,
+          major: row.majName || null,
+          type: row.lecType || null,
+          credit: row.lecCre || null,
+          numOfTime: row.lecHour || null,
           professor:
             row.lecProf !== null ? row.lecProf.replace(".", ",") : null,
           time: row.lecTime !== null ? row.lecTime.replace(".", ",") : null,
-          place: row.lecRm !== null ? row.ID : null,
+          place: row.lecRm || null,
         };
       });
 
@@ -43,12 +43,9 @@ H000-1-3362-2,대학영어,소프트웨어융합대학,교필,3,3,에이미,월2
       // 성공 시 결과 응답으로 전송
       return res.json(lecInfo);
     } else {
-      // 데이터가 없는 경우
-      const response = {
-        result: "false",
-      };
+      console.log("loadlectureall Fail");
 
-      return res.json(response);
+      return res.json({ result: "false" });
     }
   });
 });

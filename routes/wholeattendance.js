@@ -59,7 +59,8 @@ H020-4-0846-1,2,3,1
       // 성공 시 결과 응답으로 전송
       res.json(modifiedAttendInfo);
     } else {
-      // 데이터가 없는 경우
+      console.log("wholeattendance Fail");
+
       return res.json({ result: "false" });
     }
   });

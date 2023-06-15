@@ -32,20 +32,17 @@ lecYear,lecSem
     if (results.length > 0) {
       // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
       const semesterInfo = results.map((row) => [
-        row.lecYear !== null ? row.lecYear : null,
-        row.semester !== null ? row.semester : null,
+        row.lecYear || null,
+        row.semester || null,
       ]);
 
       console.log(semesterInfo);
 
       return res.json(semesterInfo);
     } else {
-      // 데이터가 없는 경우
-      const response = {
-        result: "false",
-      };
+      console.log("semesters Fail");
 
-      return res.json(response);
+      return res.json({ result: "false" });
     }
   });
 });

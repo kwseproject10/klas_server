@@ -17,16 +17,19 @@ const loadlectureallRouter = require("./routes/loadlectureall");
 const userInformRouter = require("./routes/userInform");
 const semestersRouter = require("./routes/semesters");
 // const scheduleRouter = require("./routes/schedule");
+// 5
 const creditRouter = require("./routes/credit");
 const wholelectureRouter = require("./routes/wholelecture");
 const lecturesRouter = require("./routes/lectures");
 const wholeattendanceRouter = require("./routes/wholeattendance");
 const wholenoticeRouter = require("./routes/wholenotice");
+// 10
 const wholeassignmentRouter = require("./routes/wholeassignment");
 const syllabusRouter = require("./routes/syllabus");
 const noticeRouter = require("./routes/notice");
 const noticepostRouter = require("./routes/noticepost");
 const archiveRouter = require("./routes/archive");
+// 15
 const archivepostRouter = require("./routes/archivepost");
 const assignmentRouter = require("./routes/assignment");
 const assignmentpostRouter = require("./routes/assignmentpost");
@@ -73,16 +76,19 @@ app.use("/loadlectureall", loadlectureallRouter);
 app.use("/userInform", userInformRouter);
 app.use("/semesters", semestersRouter);
 // app.use("/schedule", scheduleRouter);
+//5
 app.use("/credit", creditRouter);
 app.use("/wholelecture", wholelectureRouter);
 app.use("/lectures", lecturesRouter);
 app.use("/wholeattendance", wholeattendanceRouter);
 app.use("/wholenotice", wholenoticeRouter);
+// 10
 app.use("/wholeassignment", wholeassignmentRouter);
 app.use("/syllabus", syllabusRouter);
 app.use("/notice", noticeRouter);
 app.use("/noticepost", noticepostRouter);
 app.use("/archive", archiveRouter);
+// 15
 app.use("/archivepost", archivepostRouter);
 app.use("/assignment", assignmentRouter);
 app.use("/assignmentpost", assignmentpostRouter);

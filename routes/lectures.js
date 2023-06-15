@@ -51,17 +51,17 @@ lecName,professor,major,lecType,credit,numOfTime,lecTime,place,ID
 
         return {
           key: index.toString(),
-          name: row.lecName,
-          professor: professors,
-          major: row.major,
-          type: row.lecType,
-          credit: row.credit.toString(),
-          numOfTime: row.numOfTime.toString(),
+          name: row.lecName || null,
+          professor: professors || null,
+          major: row.major || null,
+          type: row.lecType || null,
+          credit: row.credit.toString() || null,
+          numOfTime: row.numOfTime.toString() || null,
 
-          time: times,
-          place: places,
+          time: times || null,
+          place: places || null,
 
-          ID: row.ID,
+          ID: row.ID || null,
         };
       });
 
@@ -70,12 +70,9 @@ lecName,professor,major,lecType,credit,numOfTime,lecTime,place,ID
       // 성공 시 결과 응답으로 전송
       return res.json(enrollInfo);
     } else {
-      // 데이터가 없는 경우
-      const response = {
-        result: "false",
-      };
+      console.log("lectures Fail");
 
-      return res.json(response);
+      return res.json({ result: "false" });
     }
   });
 });

@@ -40,6 +40,8 @@ boTitle,lecName,boFDate
 
       res.json(noticeInfo);
     } else {
+      console.log("wholenotice Fail");
+
       return res.json({ result: "false" });
     }
   });

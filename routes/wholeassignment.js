@@ -85,7 +85,9 @@ title,subject,startDate,endDate,due
 
       res.json(assignmentInfo); // 성공
     } else {
-      return res.json({ result: "false" }); // 실패
+      console.log("wholeassignment Fail");
+
+      return res.json({ result: "false" });
     }
   });
 });

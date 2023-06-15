@@ -4,11 +4,11 @@ const connection = require("../modules/mysql");
 
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const userID = parseInt(req.query.userID);
+  const userID = req.query.userID;
   const PW = req.query.PW;
 
-  // Check if userID is NaN and set it to null
-  if (isNaN(userID)) {
+  // Check if password is NULL and set it to null
+  if (userID === "NULL") {
     userID = null;
   }
 
@@ -35,22 +35,19 @@ userID,pw,userType
 
     if (results.length > 0) {
       // 인증 성공 시 결과와 사용자 ID를 응답으로 전송
-      const response = {
+      const authSuccess = {
         result: "true",
         userID: results[0].userID,
         userType: results[0].userType,
       };
 
-      console.log(response);
+      console.log(authSuccess);
 
-      return res.json(response);
+      return res.json(authSuccess);
     } else {
-      // 결과가 없는 경우 "false" 값을 가진 result 응답으로 전송
-      const response = {
-        result: "false",
-      };
+      console.log("auth Fail");
 
-      return res.json(response);
+      return res.json({ result: "false" });
     }
   });
 });

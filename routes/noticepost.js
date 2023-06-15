@@ -42,6 +42,8 @@ name,poster,postDate,postHit,postfileURL,postText
       console.log(postInfo);
       res.json(postInfo);
     } else {
+      console.log("noticepost Fail");
+
       return res.json({ result: "false" });
     }
   });

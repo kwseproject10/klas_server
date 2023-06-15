@@ -52,6 +52,8 @@ clWeek,clNum,attend
       console.log(modifiedAttendInfo);
       res.json(modifiedAttendInfo);
     } else {
+      console.log("attendance Fail");
+
       return res.json({ result: "false" });
     }
   });
