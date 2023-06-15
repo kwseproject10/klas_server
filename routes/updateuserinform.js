@@ -2,7 +2,19 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const path = require("path");
+
+const storage = multer.diskStorage({
+  destination: path.resolve(__dirname, "/uploads"),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const extension = path.extname(file.originalname);
+    const filename = file.fieldname + "-" + uniqueSuffix + extension;
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage });
 
 const db = connection;
 
@@ -39,6 +51,7 @@ router.post("/", upload.single("file"), (req, res) => {
         return res.status(500).send("Failed to save file to database");
       }
 
+      console.log("사진 업로드 성공");
       updateUserInformation(req, res);
     });
   } else {
