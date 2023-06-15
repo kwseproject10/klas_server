@@ -29,7 +29,7 @@ NULL,대학영어,NULL
 
     if (results.length > 0) {
       const today = new Date();
-      const timeDiff = row.endDate.getTime() - today.getTime();
+      const timeDiff = new Date(results[0].endDate).getTime() - today.getTime();
       const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
       // 결과를 원하는 형태로 가공
