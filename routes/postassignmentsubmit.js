@@ -10,7 +10,12 @@ router.post("/", upload.single('file'),(req, res) => {
     const file = req.file;
     const data = req.body;
     
-    const values = [file.originalname, file.path];
+    const values = [
+        file.filename,
+        file.originalname,
+        file.path,
+        file.size,
+      ];
     /* 과제 제출*/
     const query =
         "";

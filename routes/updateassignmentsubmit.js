@@ -15,7 +15,12 @@ router.post("/", upload.single('file'),(req, res) => {
         "";
     const query2 = "";
 
-    const values = [file.originalname, file.path];
+    const values = [
+        file.filename,
+        file.originalname,
+        file.path,
+        file.size,
+      ];
     //
     connection.query(query1, data.assignmentsubmitID, (error, results) => {
         if (err) {
@@ -24,7 +29,7 @@ router.post("/", upload.single('file'),(req, res) => {
             return;
         } else {
             if (results.length > 0) {
-                console.log("존재하지 않는 과제 ID입니다.");
+                console.log("존재하지 않는 과제 제출 ID입니다.");
                 res.json({ result: false });
             } else {
                 connection.query(query2, values, (error, results) => {
