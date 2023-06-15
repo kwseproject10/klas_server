@@ -68,3 +68,20 @@ router.post("/", (req, res) => {
 });
 
 module.exports = router;
+/*
+{
+  "userID": userID,
+  "PW": password,
+  "userName": name,
+  "type": type,
+  "major": major,
+  "phoneNum1": phoneNum1,
+  "phoneNum2": phoneNum2,
+  "phoneNum3": phoneNum3,
+  "birthYear": birthYear,
+  "birthMonth": birthMonth,
+  "birthDay": birthDay,
+  "EmailID": EmailID,
+  "EmailDomain": EmailDomain
+}
+*/

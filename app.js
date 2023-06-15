@@ -35,6 +35,13 @@ const attendanceRouter = require("./routes/attendance");
 //POST
 const signupRouter = require("./routes/signup");
 const updateuserinformRouter = require("./routes/updateuserinform");
+const postnoticeRouter = require("./routes/postnotice");
+const updatenoticepostRouter = require("./routes/updatenoticepost");
+const postarchiveRouter = require("./routes/archivepost");
+const updatearchivepostRouter = require("./routes/updatearchivepost");
+const postassignmentRouter = require("./routes/postassignment");
+const updateassignmentpostRouter = require("./routes/updateassignmentpost");
+
 const enrolllecture = require("./routes/enrolllecture");
 // express 객체 생성
 var app = express();
@@ -84,7 +91,6 @@ app.use("/attendance", attendanceRouter);
 //POST
 app.use("/signup", signupRouter);
 app.use("/updateuserinform", updateuserinformRouter);
-app.use("/enrolllecture", enrolllecture);
 
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
