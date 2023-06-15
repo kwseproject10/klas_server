@@ -18,7 +18,7 @@ router.post("/", (req, res) => {
   const lectureID = data.lectureID;
 
   const query1 =
-    "SELECT lecKey FROM lectures l where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) = ?";
+    "SELECT lecKey FROM lectures l where YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem and concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) = ?";
 
   connection.query(query1, [lectureID], (error, result1) => {
     if (error) {
@@ -28,28 +28,28 @@ router.post("/", (req, res) => {
       return res.status(500).json({ error: "Internal server error" });
     } else {
       if (result1.length > 0) {
-        hit = "0";
-        type = "notice";
-        const query3 = "";
+        const query2 =
+          "INSERT INTO boards (lecKey, boType, boTitle, boCont, boFDate, boPoster) VALUES (?, ?, ?, ?,?,?)";
+
+        const now = new Date();
 
         connection.query(
-          query3,
+          query2,
           [
-            data.lectureID,
-            notice,
+            result1[0].lecKey,
+            "notice",
             data.title,
-            data.cont || null,
-            hit,
-            data.date,
+            data.content || null,
+            now,
             data.poster,
           ],
-          (error, result3) => {
+          (error, result2) => {
             if (error) {
               console.error("MySQL 저장 실패:", error);
 
               res.json({ result: false });
             } else {
-              console.log("MySQL 저장 성공:", result3);
+              console.log("MySQL 저장 성공:", result2);
 
               res.json({ result: true });
             }

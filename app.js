@@ -44,6 +44,7 @@ const signupRouter = require("./routes/signup");
 const updateuserinformRouter = require("./routes/updateuserinform");
 
 const postnoticeRouter = require("./routes/postnotice");
+
 const updatenoticepostRouter = require("./routes/updatenoticepost");
 const postarchiveRouter = require("./routes/postarchive");
 const updatearchivepostRouter = require("./routes/updatearchivepost");
@@ -105,6 +106,8 @@ app.use("/lecturelastboard", lecturelastboardRouter);
 //POST
 app.use("/signup", signupRouter);
 app.use("/updateuserinform", updateuserinformRouter);
+
+app.use("/postnotice", postnoticeRouter);
 
 app.use("/enrolllecture", enrolllectureRouter);
 
