@@ -45,7 +45,7 @@ H000-1-3362-2,대학영어,소프트웨어융합대학,교필,3,3,에이미,월2
     } else {
       console.log("loadlectureall Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });

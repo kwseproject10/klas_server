@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boTitle title, lecName subject,boFDate date from lectures l join boards b on l.lecKey = b.lecKey and boType = 'assignment' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
+    "select boKey key,boTitle title, lecName subject,boFDate date from lectures l join boards b on l.lecKey = b.lecKey and boType = 'assignment' where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
   /*
 title,subject,date
 NULL,대학영어,NULL
@@ -31,7 +31,7 @@ NULL,대학영어,NULL
       // 결과를 원하는 형태로 가공
       const noticeList = results.map((row, index) => {
         return {
-          key: index.toString(),
+          key: row.key,
           title: row.title,
           subject: row.subject,
           date: row.date,

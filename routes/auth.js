@@ -20,6 +20,7 @@ router.get("/", (req, res) => {
   // MySQL 쿼리를 사용하여 사용자 ID와 비밀번호를 확인
   const query =
     "SELECT userID,pw,userType FROM users as u where userID = ? and pw = ?";
+
   /*
 userID,pw,userType
 2020123456,1,student
@@ -29,8 +30,7 @@ userID,pw,userType
   connection.query(query, [userID, PW], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
-      res.status(500).json({ error: "Internal server error" });
-      return;
+      return res.status(500).json({ error: "Internal server error" });
     }
 
     if (results.length > 0) {

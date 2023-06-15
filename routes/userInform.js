@@ -22,8 +22,7 @@ userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorE
   connection.query(query, [userID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
-      res.status(500).json({ error: "Internal server error" });
-      return;
+      return res.status(500).json({ error: "Internal server error" });
     }
 
     if (results.length > 0) {
@@ -61,7 +60,7 @@ userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorE
     } else {
       console.log("userInform Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });
