@@ -149,20 +149,20 @@ lecYear,semester,lecType,lecCre,enCre
             // 학점 정보 계산
             if (row.lecType.charAt(0) === "전") {
               // 전공 학점
-              userCredit[year][semester].major += row.lecCre || 0;
-              userCredit[year][semester].total += row.lecCre || 0;
+              userCredit[year][semester].major += uCre || 0;
+              userCredit[year][semester].total += uCre || 0;
               userCredit[year][semester].GPA += gpaCre || 0;
             } else if (
               row.lecType.charAt(0) === "교" ||
               row.lecType.charAt(0) === "기"
             ) {
               // 교양 학점
-              userCredit[year][semester].general += row.lecCre || 0;
-              userCredit[year][semester].total += row.lecCre || 0;
+              userCredit[year][semester].general += uCre || 0;
+              userCredit[year][semester].total += uCre || 0;
               userCredit[year][semester].GPA += gpaCre || 0;
             } else {
-              userCredit[year][semester].etc += row.lecCre || 0;
-              userCredit[year][semester].total += row.lecCre || 0;
+              userCredit[year][semester].etc += uCre || 0;
+              userCredit[year][semester].total += uCre || 0;
               userCredit[year][semester].GPA += gpaCre || 0;
             }
           });
@@ -197,13 +197,13 @@ lecYear,semester,lecType,lecCre,enCre
         } else {
           console.log("credit Fail : No Data");
 
-          return res.json({ result: "false" });
+          return res.json([]);
         }
       });
     } else {
       console.log("credit Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });

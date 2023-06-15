@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boKey,boTitle title,lecName subject,boFDate date,boHit hit from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and b.boType = 'notice' where e.userID = ?";
+    "select boKey,boTitle title,lecName subject,boFDate date,boHit hit from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and b.boType = 'notice' where botype = 'notice' and e.userID = ? order by boFDate desc";
   /*
 boKey,title,subject,date,hit
 1,"Zoom 링크",소프트웨어공학,"2023-04-28 12:13:00",38
