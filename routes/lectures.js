@@ -4,10 +4,10 @@ const connection = require("../modules/mysql");
 
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const userID = parseInt(req.query.userID);
+  const userID = req.query.userID;
 
   // Check if userID is NaN and set it to null
-  if (isNaN(userID)) {
+  if (userID === "NULL") {
     userID = null;
   }
 
