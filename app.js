@@ -1,6 +1,7 @@
 // 포함된 module
 var createError = require("http-errors");
 var express = require("express");
+const bodyParser = require("body-parser");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -31,11 +32,10 @@ const assignmentRouter = require("./routes/assignment");
 const assignmentpostRouter = require("./routes/assignmentpost");
 const attendanceRouter = require("./routes/attendance");
 
-const enrolllecture = require("./routes/enrolllecture");
-
 //POST
 const signupRouter = require("./routes/signup");
 const updateuserinformRouter = require("./routes/updateuserinform");
+const enrolllecture = require("./routes/enrolllecture");
 // express 객체 생성
 var app = express();
 
@@ -49,6 +49,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+// Body parser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // cors 설정
 app.use(cors());
@@ -78,11 +81,10 @@ app.use("/assignment", assignmentRouter);
 app.use("/assignmentpost", assignmentpostRouter);
 app.use("/attendance", attendanceRouter);
 
-app.use("/enrolllecture", enrolllecture);
-
 //POST
 app.use("/signup", signupRouter);
 app.use("/updateuserinform", updateuserinformRouter);
+app.use("/enrolllecture", enrolllecture);
 
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler
