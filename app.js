@@ -6,8 +6,6 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
 
 // routes 소스 가져옴
 var indexRouter = require("./routes/index");
@@ -39,8 +37,8 @@ const attendanceRouter = require("./routes/attendance");
 
 //POST
 const signupRouter = require("./routes/signup");
-
 const updateuserinformRouter = require("./routes/updateuserinform");
+
 const postnoticeRouter = require("./routes/postnotice");
 const updatenoticepostRouter = require("./routes/updatenoticepost");
 const postarchiveRouter = require("./routes/archivepost");
@@ -99,7 +97,6 @@ app.use("/attendance", attendanceRouter);
 
 //POST
 app.use("/signup", signupRouter);
-
 app.use("/updateuserinform", updateuserinformRouter);
 
 // 404 잡아서 에러 핸들러에게 전달

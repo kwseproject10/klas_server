@@ -1,61 +1,63 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
-// /signup
-router.post("/", (req, res) => {
+/* body 형식
+{
+	"userID": 233113213213
+    "Email": "a@a.com",
+    "PhoneNum": "010-0000-0000",
+    "PW": "password"
+}*/
 
-    const userID = {
-        studentID: req.body.studentID,
+// /updateuserinform
+router.post("/", upload.single("file"), (req, res) => {
+  const uploadedFile = req.file;
+
+  // 파일 정보를 files 테이블에 저장
+  const filePath = uploadedFile.path; // 업로드된 파일의 경로
+  const originalFileName = uploadedFile.originalname; // 업로드된 파일의 원본 이름
+  const fileSize = uploadedFile.size; // 업로드된 파일의 크기
+
+  // 파일 정보를 files 테이블에 저장하는 작업 수행 (예시: INSERT 문 실행)
+  const fileSql =
+    "INSERT INTO files (ufName, ufRName, ufPath, ufSize) VALUES (?, ?, ?, ?)";
+  const fileValues = [
+    uploadedFile.filename,
+    originalFileName,
+    filePath,
+    fileSize,
+  ];
+
+  db.query(fileSql, fileValues, (fileError, fileResults) => {
+    if (fileError) {
+      console.error("Error saving file to database:", fileError);
+      return res.status(500).send("Failed to save file to database");
     }
-    const userinform = req.body;
 
-    /*유저 개인정보 수정을 위한 유저ID 체크*/
-    const query1 =
-        "";
+    // 파일 정보 저장이 성공하면 사용자 정보를 수정
+    const userID = req.body.userID;
+    const email = req.body.Email;
+    const phone = req.body.PhoneNum;
+    const pw = req.body.PW;
 
-    connection.query(query, userID, (err, results) => {
-        if (err) {
-            console.error("MySQL query error: ", err);
-            res.status(500).json({ error: "Internal server error" });
-            return;
-        }
+    // 사용자 정보를 users 테이블에 수정하는 작업 수행 (예시: UPDATE 문 실행)
+    const userSql =
+      "UPDATE users SET email = ?, phone = ?, pw = ? where userID = ?";
+    const userValues = [email, phone, pw, userID];
 
-        if (results.length > 0) {
-            /*유저의 새로운 정보 보냄*/
-            const query2 =
-                "";
+    db.query(userSql, userValues, (userError, userResults) => {
+      if (userError) {
+        console.error("Error updating user information:", userError);
+        return res.status(500).send("Failed to update user information");
+      }
 
-            connection.query(query2, userinform, (err, results) => {
-                if (err) {
-                    console.error("MySQL query error: ", err);
-                    res.status(500).json({ error: "Internal server error" });
-                    return;
-                }
-
-                if (results.length > 0) {
-                    // 결과를 원하는 형태로 가공
-                    const response = {
-                        result: "true",
-                    };
-                    // 성공 시 결과 응답으로 전송
-                    res.json(response);
-                } else {
-                    // 데이터가 없는 경우
-                    const response = {
-                        result: "false",
-                    };
-                    res.json(response);
-                }
-            });
-        }
-        else {
-            const response = {
-                result: "false",
-            };
-            // 성공 시 결과 응답으로 전송
-            res.json(response);
-        }
+      console.log("File and user information updated successfully");
+      res.status(200).json({ result: true });
     });
+  });
 });
+
 module.exports = router;
