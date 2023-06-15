@@ -37,6 +37,7 @@ const attendanceRouter = require("./routes/attendance");
 
 //POST
 const signupRouter = require("./routes/signup");
+
 const updateuserinformRouter = require("./routes/updateuserinform");
 const postnoticeRouter = require("./routes/postnotice");
 const updatenoticepostRouter = require("./routes/updatenoticepost");
@@ -96,6 +97,7 @@ app.use("/attendance", attendanceRouter);
 
 //POST
 app.use("/signup", signupRouter);
+
 app.use("/updateuserinform", updateuserinformRouter);
 
 // 404 잡아서 에러 핸들러에게 전달
