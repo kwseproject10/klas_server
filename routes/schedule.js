@@ -34,6 +34,8 @@ router.get("/", (req, res) => {
   let enddate1 = new Date(2023, 5, 15);
   let enddate2 = new Date(2023, 11, 15);
 
+  const line = {};
+
   const query = "";
 
   // /schedule?userID=*
@@ -47,35 +49,31 @@ router.get("/", (req, res) => {
     if (results.length > 0) {
       // 결과를 원하는 형태로 가공
       const formattedResults = {};
+      var length = 0;
       var index = 0;
       results.forEach((row) => {
-        let day1 = row.day1.substring(1, 2);
-        let time1 = row.day1.substring(2);
-
-        let day2 = row.day2.substring(1, 2);
-        let time2 = row.day2.substring(2);
-
+        for (let i = 1; i < 7; i++) {
+          let part = results.day.substring(i, i + 1);
+          if (part != "") {
+            line.push(part);
+            length++;
+          }
+        }
         temp.setDate(2023, 2, 5);
         for (; temp != enddate1 && temp != enddate2;) {
-          if (temp.getDay() === Datenum(day1)) {
-            formattedResults.push({
-              'key': index.toString(),
-              'title': row.title || null,
-              'subject': row.subject || null,
-              'date': temp.getDate() || null,
-              'time': timeConv(time1) || null,
-            });
-            index++;
-            temp.setDate(temp.getDate() + 1);
-          }
-          else if (temp.getDay() === Datenum(day2)) {
-            formattedResults.push({
-              'key': index.toString(),
-              'title': row.title || null,
-              'subject': row.subject || null,
-              'date': temp.getDate().toString() || null,
-              'time': timeConv(time2) || null,
-            });
+          if (temp.getDay() === dateNum(day)) {
+            let day = "";
+            let time = "";
+            for (let i = 0; i < length; i++) {
+              
+              formattedResults.push({
+                'key': index.toString(),
+                'title': row.title || null,
+                'subject': row.subject || null,
+                'date': temp.getDate() || null,
+                'time': timeConv(time1) || null,
+              });
+            }
             index++;
             temp.setDate(temp.getDate() + 1);
           }

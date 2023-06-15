@@ -2,36 +2,68 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
+/*
+{
+    "lectureID": lectureID,
+    "notice": notice,
+    "title": title,
+    "cont": cont,
+    "date": date,
+    "poster": poster,
+}
+*/
+
 // /postnotice
 router.post("/", (req, res) => {
-
     const data = req.body;
 
-    /* 공지사항 게시물 작성*/
-    const query =
-        "";
+    const query1 = "";
 
-    connection.query(query, data, (err, results) => {
-        if (err) {
-            console.error("MySQL query error: ", err);
+    connection.query(query1, [data.lectureID], (error, result1) => {
+        if (error) {
+            // 아예 db 접근이 안되는 경우
+            console.error("MySQL query error: ", error);
             res.status(500).json({ error: "Internal server error" });
-            return;
-        }
 
-        if (results.length > 0) {
-            const response = {
-                result: "true",
-            };
-            // 성공 시 결과 응답으로 전송
-            res.json(response);
-        }
-        else {
-            // 데이터가 없는 경우
-            const response = {
-                result: "false",
-            };
-            res.json(response);
+            return;
+        } else {
+            if (result1.length > 0) {
+
+                hit = "0";
+                type = "notice";
+                const query3 =
+                    "";
+
+                connection.query(
+                    query3,
+                    [
+                        data.lectureID,
+                        notice,
+                        data.title,
+                        data.cont || null,
+                        hit,
+                        data.date,
+                        data.poster,
+                    ],
+                    (error, result3) => {
+                        if (error) {
+                            console.error("MySQL 저장 실패:", error);
+
+                            res.json({ result: false });
+                        } else {
+                            console.log("MySQL 저장 성공:", result3);
+
+                            res.json({ result: true });
+                        }
+                    }
+                );
+            } else {
+                console.log("존재하지 않는 강의 ID입니다.");
+
+                res.json({ result: false });
+            }
         }
     });
 });
+
 module.exports = router;
