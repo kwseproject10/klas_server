@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boKey,boTitle title,lecName subject,asSDate startDate,asEDate endDate,boHit hit from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and b.boType = 'notice' where botype = 'assignment' and e.userID = ? order by boFDate desc";
+    "select b.boKey,boTitle title,lecName subject,asSDate startDate,asEDate endDate from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and boType = 'assignment' left join submits s on b.boKey = s.boKey and s.smDone != 1 where e.userID = ? order by asSDate desc";
   /*
 title,subject,startDate,endDate,due
 */
@@ -39,7 +39,6 @@ title,subject,startDate,endDate,due
           subject: row.subject,
           startDate: row.startDate,
           endDate: row.endDate,
-          hit: row.hit,
           due: daysDiff,
         };
       });
@@ -50,7 +49,7 @@ title,subject,startDate,endDate,due
     } else {
       console.log("wholeassignment Fail");
 
-      return res.json({ result: "false" });
+      return res.json([]);
     }
   });
 });
