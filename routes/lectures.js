@@ -30,7 +30,7 @@ lecName,professor,major,lecType,credit,numOfTime,lecTime,place,ID
     if (results.length > 0) {
       // 결과를 원하는 형태로 가공
       const enrollInfo = results.map((row, index) => {
-        let professors = row.professor ? row.place.split(".") : [];
+        let professors = row.professor ? row.professor.split(".") : [];
         let times = row.lecTime ? row.lecTime.split(".") : [];
         let places = [row.place, row.place];
         let weekday;
@@ -79,4 +79,5 @@ lecName,professor,major,lecType,credit,numOfTime,lecTime,place,ID
     }
   });
 });
+
 module.exports = router;
