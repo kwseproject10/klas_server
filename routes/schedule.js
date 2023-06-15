@@ -11,6 +11,29 @@ router.get("/", (req, res) => {
     userID = null;
   }
 
+  const dateNum = {
+    "일": 0,
+    "월": 1,
+    "화": 2,
+    "수": 3,
+    "목": 4,
+    "금": 5,
+    "토": 6,
+  }
+  const timeConv = {
+    1: "09:00",
+    2: "10:30",
+    3: "12:00",
+    4: "13:30",
+    5: "15:00",
+    6: "16:30",
+  }
+
+  let temp = new Date(2023, 2, 5);
+
+  let enddate1 = new Date(2023, 5, 15);
+  let enddate2 = new Date(2023, 11, 15);
+
   const query = "";
 
   // /schedule?userID=*
@@ -23,14 +46,42 @@ router.get("/", (req, res) => {
 
     if (results.length > 0) {
       // 결과를 원하는 형태로 가공
-      const formattedResults = results.map((row, index) => {
-        return {
-          key: index.toString(),
-          title: row.title,
-          subject: row.subject,
-          date: row.date,
-          time: row.time,
-        };
+      const formattedResults = {};
+      var index = 0;
+      results.forEach((row) => {
+        let day1 = row.day1.substring(1, 2);
+        let time1 = row.day1.substring(2);
+
+        let day2 = row.day2.substring(1, 2);
+        let time2 = row.day2.substring(2);
+
+        temp.setDate(2023, 2, 5);
+        for (; temp != enddate1 && temp != enddate2;) {
+          if (temp.getDay() === Datenum(day1)) {
+            formattedResults.push({
+              'key': index.toString(),
+              'title': row.title || null,
+              'subject': row.subject || null,
+              'date': temp.getDate() || null,
+              'time': timeConv(time1) || null,
+            });
+            index++;
+            temp.setDate(temp.getDate() + 1);
+          }
+          else if (temp.getDay() === Datenum(day2)) {
+            formattedResults.push({
+              'key': index.toString(),
+              'title': row.title || null,
+              'subject': row.subject || null,
+              'date': temp.getDate().toString() || null,
+              'time': timeConv(time2) || null,
+            });
+            index++;
+            temp.setDate(temp.getDate() + 1);
+          }
+        }
+
+
       });
       // 성공 시 결과 응답으로 전송
       res.json(formattedResults);
