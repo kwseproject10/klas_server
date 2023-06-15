@@ -43,6 +43,20 @@ router.get("/", (req, res) => {
         }
 
         if (results.length > 0) {
+            const time = {};
+            let temp = results.time;
+            let day = "";
+            let num = "";
+            for(let i; i < 9; i++ ){
+                let part = temp.substring(i, i+1);
+                if(part === "월" ||part === "화" ||part === "수" ||part === "목" ||part === "금"){
+                    day = part;
+                }else if(part === ","){
+                }else{
+                    num = part;
+                    time.push(day + num);
+                }
+            }
             // 결과를 원하는 형태로 가공
             const lastList = {
                 "key": "0",
@@ -52,7 +66,7 @@ router.get("/", (req, res) => {
                 "type": results.type,
                 "credit": results.credit,
                 "numOfTime": results.numOfTime,
-                "time": results.time,
+                "time": time,
                 "place": results.place,
                 "ID": results.lectureID,
             };
