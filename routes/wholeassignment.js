@@ -49,7 +49,16 @@ title,subject,startDate,endDate,due
     } else {
       console.log("wholeassignment Fail");
 
-      return res.json([]);
+      return res.json([
+        {
+          key: null,
+          title: null,
+          subject: null,
+          startDate: null,
+          endDate: null,
+          due: null,
+        },
+      ]);
     }
   });
 });

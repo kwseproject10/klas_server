@@ -44,13 +44,15 @@ boKey,title,subject,date,hit
     } else {
       console.log("wholenotice Fail");
 
-      return res.json({
-        key: null,
-        title: null,
-        subject: null,
-        date: null,
-        hit: null,
-      });
+      return res.json([
+        {
+          key: null,
+          title: null,
+          subject: null,
+          date: null,
+          hit: null,
+        },
+      ]);
     }
   });
 });
