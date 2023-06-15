@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
   const query =
     "select b.boKey,boTitle title,lecName subject,asSDate startDate,asEDate endDate from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and boType = 'assignment' left join submits s on b.boKey = s.boKey and s.smDone != 1 where e.userID = ? and concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=? order by asSDate desc";
 
-  // /wholeassignment?userID=*
+  // /assignmentnotsubmitted?userID=*&lectureID=*
   connection.query(query, [userID, lectureID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
@@ -48,7 +48,7 @@ router.get("/", (req, res) => {
 
       res.json(assignmentInfo); // 성공
     } else {
-      console.log("wholeassignment Fail");
+      console.log("assignmentnotsubmitted Fail");
 
       return res.json([]);
     }
