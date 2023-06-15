@@ -2,27 +2,24 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /noticepost?noticeID=*
+// /noticepost?ID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const noticeID = req.query.noticeID;
+  const ID = req.query.ID;
 
-  if (noticeID === "NULL") {
-    noticeID = null;
+  if (ID === "NULL") {
+    ID = null;
   }
 
   const query =
     "select boTitle name, boPoster poster,boFDate postDate, boHit postHit,bfPath postfileURL,boCont postText from boards b left join boardfiles bf on b.boKey = bf.boKey where boType='notice' and b.bokey=?";
-  /*
-name,poster,postDate,postHit,postfileURL,postText
-*/
 
-  // /noticepost?noticeID=*
-  connection.query(query, [noticeID], (err, results) => {
+  // /noticepost?ID=*
+  connection.query(query, [ID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
-      res.status(500).json({ error: "Internal server error" });
-      return;
+
+      return res.status(500).json({ error: "Internal server error" });
     }
 
     if (results.length > 0) {

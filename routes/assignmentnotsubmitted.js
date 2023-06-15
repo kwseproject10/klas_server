@@ -16,13 +16,10 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select b.boKey,boTitle title,lecName subject,asSDate startDate,asEDate endDate from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and boType = 'assignment' left join submits s on b.boKey = s.boKey and s.smDone != 1 where e.userID = ? order by asSDate desc";
-  /*
-title,subject,startDate,endDate,due
-*/
+    "select b.boKey,boTitle title,lecName subject,asSDate startDate,asEDate endDate from enrollments e join lectures l on e.leckey = l.leckey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join boards b on l.lecKey = b.lecKey and boType = 'assignment' left join submits s on b.boKey = s.boKey and s.smDone != 1 where e.userID = ? and concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=? order by asSDate desc";
 
   // /wholeassignment?userID=*
-  connection.query(query, [userID], (err, results) => {
+  connection.query(query, [userID, lectureID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
@@ -30,12 +27,13 @@ title,subject,startDate,endDate,due
     }
 
     if (results.length > 0) {
-      const today = new Date();
-      const timeDiff = new Date(results[0].endDate).getTime() - today.getTime();
-      const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
       // 결과를 원하는 형태로 가공
       const assignmentInfo = results.map((row, index) => {
+        const today = new Date();
+        const endDate = new Date(row.endDate);
+        const timeDiff = endDate.getTime() - today.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
         return {
           key: row.boKey,
           title: row.title,

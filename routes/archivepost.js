@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /archivepost?noticeID=*
+// /archivepost?ID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const noticeID = req.query.noticeID;
+  const ID = req.query.ID;
 
-  if (noticeID === "NULL") {
-    noticeID = null;
+  if (ID === "NULL") {
+    ID = null;
   }
 
   const query =
@@ -17,8 +17,8 @@ router.get("/", (req, res) => {
 name,poster,postDate,postHit,postfileURL,postText
 */
 
-  // /archivepost?noticeID=*
-  connection.query(query, [noticeID], (err, results) => {
+  // /archivepost?ID=*
+  connection.query(query, [ID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });

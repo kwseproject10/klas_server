@@ -32,6 +32,8 @@ const archiveRouter = require("./routes/archive");
 // 15
 const archivepostRouter = require("./routes/archivepost");
 const assignmentRouter = require("./routes/assignment");
+const assignmentnotsubmittedRouter = require("./routes/assignmentnotsubmitted");
+
 const assignmentpostRouter = require("./routes/assignmentpost");
 const attendanceRouter = require("./routes/attendance");
 
@@ -92,6 +94,7 @@ app.use("/archive", archiveRouter);
 // 15
 app.use("/archivepost", archivepostRouter);
 app.use("/assignment", assignmentRouter);
+app.use("/assignmentnotsubmitted", assignmentnotsubmittedRouter);
 app.use("/assignmentpost", assignmentpostRouter);
 app.use("/attendance", attendanceRouter);
 

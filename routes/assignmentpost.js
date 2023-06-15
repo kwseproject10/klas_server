@@ -2,17 +2,17 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /assignmentpost?lectureID=*&assignmentID=*
+// /assignmentpost?lectureID=*&ID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
   let lectureID = req.query.lectureID;
-  let assignmentID = req.query.assignmentID;
+  let ID = req.query.ID;
 
   if (lectureID === "NULL") {
     lectureID = null;
   }
-  if (isNaN(assignmentID)) {
-    assignmentID = null;
+  if (isNaN(ID)) {
+    ID = null;
   }
 
   const query =
@@ -21,8 +21,8 @@ router.get("/", (req, res) => {
 name,poster,postDate,postHit,postfileURL,postText
 */
 
-  // /assignmentpost?lectureID=*&assignmentID=*
-  connection.query(query, [lectureID, assignmentID], (err, results) => {
+  // /assignmentpost?lectureID=*&ID=*
+  connection.query(query, [lectureID, ID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
       res.status(500).json({ error: "Internal server error" });
