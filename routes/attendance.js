@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
     lectureID = null;
   }
 
-  // 테스트용 : 2020123456, H020-4-0846-1
+  // 테스트용 : 2020123456, H020-4-0846-01
   const query =
     "select clWeek,clNum,case when atState='attend' then 1 when atState='late' then 0.6 when atState='absence' then 0 end as attend from enrollments e join lectures l on e.lecKey = l.lecKey and YEAR(NOW()) = lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = lecSem join classes c on l.lecKey = c.lecKey join attendances a on c.clKey = a.clKey where e.userID=? and concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
   /*
