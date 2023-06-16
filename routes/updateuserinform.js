@@ -1,22 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
+var path = require("path");
 const multer = require("multer");
-const path = require("path");
 
 const storage = multer.diskStorage({
-  destination: path.resolve(__dirname, "/uploads"),
+  destination: (req, file, cb) => {
+    cb(null, "public/files/");
+  },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const extension = path.extname(file.originalname);
-    const filename = file.fieldname + "-" + uniqueSuffix + extension;
-    cb(null, filename);
+    cb(
+      null,
+      path.basename(file.originalname, path.extname(file.originalname)) +
+        "-" +
+        Date.now()
+    );
   },
 });
 
-const upload = multer({ storage });
-
-const db = connection;
+const upload = multer({ storage: storage });
 
 /* body 형식
 {
@@ -26,57 +28,54 @@ const db = connection;
   "PW": "password"
 }*/
 
-// /updateuserinform
 router.post("/", upload.single("file"), (req, res) => {
-  if (req.file) {
-    // 파일이 전송된 경우에만 파일 정보를 저장하고 업데이트합니다.
-    const uploadedFile = req.file;
+  const file = req.file;
+  console.log(file);
 
-    const originalFileName = uploadedFile.originalname;
-    const fileSize = uploadedFile.size;
-    const filePath = uploadedFile.path;
+  // 파일 정보
+  const fileName = file.filename;
+  const originalFileName = file.originalname;
+  const filePath = file.path;
+  const fileSize = file.size;
 
-    const fileSql =
-      "INSERT INTO files (ufName, ufRName, ufPath, ufSize) VALUES (?, ?, ?, ?)";
-    const fileValues = [
-      uploadedFile.filename,
-      originalFileName,
-      filePath,
-      fileSize,
-    ];
-
-    db.query(fileSql, fileValues, (fileError, fileResults) => {
-      if (fileError) {
-        console.error("Error saving file to database:", fileError);
-        return res.status(500).send("Failed to save file to database");
-      }
-
-      console.log("사진 업로드 성공");
-      updateUserInformation(req, res);
-    });
-  } else {
-    // 파일이 전송되지 않은 경우에는 사용자 정보만 업데이트합니다.
-    updateUserInformation(req, res);
-  }
-});
-
-function updateUserInformation(req, res) {
+  // 다른 필드에서 전송된 정보
   const userID = req.body.userID;
   const email = req.body.Email;
   const phone = req.body.PhoneNum;
   const pw = req.body.PW;
-  const userSql =
+
+  const query1 =
+    "insert into userfiles (userID, ufName, ufPath,ufSize,ufRName) values(?,?,?,?,?)";
+  const value1 = [userID, fileName, filePath, fileSize, originalFileName];
+
+  const query2 =
     "UPDATE users SET email = ?, phone = ?, pw = ? WHERE userID = ?";
-  const userValues = [email, phone, pw, userID];
+  const value2 = [email, phone, pw, userID];
 
-  db.query(userSql, userValues, (userError, userResults) => {
-    if (userError) {
-      console.error("Error updating user information:", userError);
-      return res.status(500).send("Failed to update user information");
-    }
+  Promise.all([executeQuery(query1, value1), executeQuery(query2, value2)])
+    .then(([result1, result2]) => {
+      console.log("result1: ", result1);
+      console.log("result2: ", result2);
 
-    console.log("User information updated successfully");
-    res.status(200).json({ result: true });
+      res.status(200).json({
+        result: true,
+      });
+    })
+    .catch((error) => {
+      console.error("Error saving file to database:", error);
+      res.status(500).send("Failed to save file to database");
+    });
+});
+
+function executeQuery(query, values) {
+  return new Promise((resolve, reject) => {
+    connection.query(query, values, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
   });
 }
 
