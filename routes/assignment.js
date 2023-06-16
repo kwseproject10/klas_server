@@ -4,7 +4,7 @@ const connection = require("../modules/mysql");
 
 // /assignment?lectureID=*
 router.get("/", (req, res) => {
-  const lectureID = req.query.lectureID;
+  let lectureID = req.query.lectureID;
 
   // Check if lectureID is NaN and set it to null
   if (lectureID === "NULL") {
