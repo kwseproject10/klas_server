@@ -78,6 +78,7 @@ router.post("/", upload.single("file"), (req, res) => {
                 res.status(200).json({
                   boKey: boKey,
                   result: true,
+                  filePath: null,
                 });
               }
             });
@@ -174,6 +175,7 @@ router.post("/", upload.single("file"), (req, res) => {
                     res.status(200).json({
                       boKey: boKey,
                       result: true,
+                      filePath: filePath,
                     });
                   } else {
                     console.log("4번에서 문제 발생");

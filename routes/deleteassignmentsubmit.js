@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /deleteassignmentsubmit?assignmentID=*&userID=*
+// /deleteassignmentsubmit?ID=*&userID=*
 router.delete("/", (req, res) => {
-  const assignmentID = req.query.assignmentID; // 삭제할 과제의 ID
+  const ID = req.query.ID; // 삭제할 과제의 ID
   const userID = req.query.userID; // 사용자의 ID
 
   // enrollments 테이블에서 userID에 해당하는 enKey 가져오기
@@ -26,7 +26,7 @@ router.delete("/", (req, res) => {
       "DELETE FROM submitfiles WHERE smKey IN (SELECT smKey FROM submits WHERE enKey = ? AND boKey = ?)";
     connection.query(
       deleteSubmitFilesQuery,
-      [enKey, assignmentID],
+      [enKey, ID],
       (error, submitFilesDeleteResult) => {
         if (error) {
           console.error("MySQL query error: ", error);
@@ -38,7 +38,7 @@ router.delete("/", (req, res) => {
           "DELETE FROM submits WHERE enKey = ? AND boKey = ?";
         connection.query(
           deleteSubmitsQuery,
-          [enKey, assignmentID],
+          [enKey, ID],
           (error, submitsDeleteResult) => {
             if (error) {
               console.error("MySQL query error: ", error);
