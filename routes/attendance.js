@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 
   // 테스트용 : 2020123456, H020-4-0846-01
   const query =
-    "select DISTINCT c.clKey,clWeek,clNum,case when atState='attend' then 1 when atState='late' then 0.6 when atState='absence' then 0 end as attend from enrollments e  join lectures l on e.lecKey = l.lecKey and YEAR(NOW()) = l.lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = l.lecSem  join classes c on l.lecKey = c.lecKey  join attendances a on c.clKey = a.clKey where e.userID=? and concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?";
+    "select DISTINCT c.clKey,clWeek,clNum, case when atState='attend' then 1 when atState='late' then 0.6 when atState='absence' then 0 end attend from enrollments e join lectures l on e.lecKey = l.lecKey join classes c on l.lecKey = c.lecKey join attendances a on e.enKey = a.enKey and c.clKey = a.clKey inner join enrollments e2 on e.userID = e2.userID where YEAR(NOW()) = l.lecYear and IF(MONTH(NOW()) <= 6, 1, 2) = l.lecSem and e.userID=? and concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=? ";
   /*
 clWeek,clNum,attend
 1,1,1
