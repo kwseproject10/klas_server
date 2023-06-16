@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
 
-// /enrollList?lectureID=*
+// /enrolllist?lectureID=*
 router.get("/", (req, res) => {
   let lectureID = req.query.lectureID;
 
