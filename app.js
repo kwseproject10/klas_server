@@ -98,6 +98,9 @@ app.get("/api/render-image/:imageName", (req, res) => {
   res.sendFile(imagePath);
 });
 
+// express.static 미들웨어를 사용하여 public/files 디렉토리를 정적 파일 경로로 설정
+app.use("/files", express.static(path.join(__dirname, "public/files")));
+
 // 해당 경로로 router 등록
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -129,7 +132,7 @@ app.use("/attendance", attendanceRouter);
 
 app.use("/lecturelastboard", lecturelastboardRouter);
 app.use("/lectureattendance", lectureattendanceRouter);
-app.use("/professorlectures",professorlecturesRouter);
+app.use("/professorlectures", professorlecturesRouter);
 
 app.use("/enrolllecture", enrolllectureRouter);
 
