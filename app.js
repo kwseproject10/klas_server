@@ -42,7 +42,14 @@ const lecturelastboardRouter = require("./routes/lecturelastboard");
 
 const enrolllectureRouter = require("./routes/enrolllecture");
 
-//POST
+// DELETE
+const deletelectureRouter = require("./routes/deletelecture");
+const deletenoticeRouter = require("./routes/deletenotice");
+const deletearchiveRouter = require("./routes/deletearchive");
+const deleteassignmentRouter = require("./routes/deleteassignment");
+const deleteassignmentsubmitRouter = require("./routes/deleteassignmentsubmit");
+
+// POST
 const signupRouter = require("./routes/signup");
 const updateuserinformRouter = require("./routes/updateuserinform");
 const postnoticeRouter = require("./routes/postnotice");
@@ -109,6 +116,13 @@ app.use("/lecturelastboard", lecturelastboardRouter);
 app.use("/lectureattendance", lectureattendanceRouter);
 
 app.use("/enrolllecture", enrolllectureRouter);
+
+// DELETE
+app.use("/deletelecture", deletelectureRouter);
+app.use("/deletenotice", deletenoticeRouter);
+app.use("/deletearchive", deletearchiveRouter);
+app.use("/deleteassignment", deleteassignmentRouter);
+app.use("/deleteassignmentsubmit", deleteassignmentsubmitRouter);
 
 //POST
 app.use("/signup", signupRouter);
