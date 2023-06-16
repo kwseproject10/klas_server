@@ -54,6 +54,8 @@ const postassignmentRouter = require("./routes/postassignment");
 const postassignmentsubmitRouter = require("./routes/postassignmentsubmit");
 const updateassignmentpostRouter = require("./routes/updateassignmentpost");
 
+const createlectureRouter = require("./routes/createlecture");
+
 // express 객체 생성
 var app = express();
 
@@ -118,6 +120,8 @@ app.use("/postassignment", postassignmentRouter);
 app.use("/postassignmentsubmit", postassignmentsubmitRouter);
 
 app.use("/postarchive", postarchiveRouter);
+
+app.use("/createlecture", createlectureRouter);
 
 // 404 잡아서 에러 핸들러에게 전달
 // catch 404 and forward to error handler

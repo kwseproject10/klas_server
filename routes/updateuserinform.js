@@ -33,10 +33,17 @@ router.post("/", upload.single("file"), (req, res) => {
   console.log(file);
 
   // 파일 정보
-  const fileName = file.filename;
-  const originalFileName = file.originalname;
-  const filePath = file.path;
-  const fileSize = file.size;
+  let fileName = null;
+  let originalFileName = null;
+  let filePath = null;
+  let fileSize = null;
+
+  if (file) {
+    fileName = file.filename;
+    originalFileName = file.originalname;
+    filePath = file.path;
+    fileSize = file.size;
+  }
 
   // 다른 필드에서 전송된 정보
   const userID = req.body.userID;
@@ -44,18 +51,23 @@ router.post("/", upload.single("file"), (req, res) => {
   const phone = req.body.PhoneNum;
   const pw = req.body.PW;
 
-  const query1 =
-    "insert into userfiles (userID, ufName, ufPath,ufSize,ufRName) values(?,?,?,?,?)";
-  const value1 = [userID, fileName, filePath, fileSize, originalFileName];
+  const queries = [];
+
+  if (file) {
+    const query1 =
+      "INSERT INTO userfiles (userID, ufName, ufPath, ufSize, ufRName) VALUES (?, ?, ?, ?, ?)";
+    const value1 = [userID, fileName, filePath, fileSize, originalFileName];
+    queries.push(executeQuery(query1, value1));
+  }
 
   const query2 =
     "UPDATE users SET email = ?, phone = ?, pw = ? WHERE userID = ?";
   const value2 = [email, phone, pw, userID];
+  queries.push(executeQuery(query2, value2));
 
-  Promise.all([executeQuery(query1, value1), executeQuery(query2, value2)])
-    .then(([result1, result2]) => {
-      console.log("result1: ", result1);
-      console.log("result2: ", result2);
+  Promise.all(queries)
+    .then((results) => {
+      console.log("Results:", results);
 
       res.status(200).json({
         result: true,

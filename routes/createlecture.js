@@ -4,99 +4,101 @@ const connection = require("../modules/mysql");
 
 /*
 {
-majName
-lecName
-lecType
-lecCre
-lecHour
-lecRm
-lecTime
-lecDesc
-tbTitle
-tbAuth
-tbPubl
-ratAtten
-ratMid
-ratFin
-ratAss
+lecProf     교수이름
+majName     전공이름
+lecName     강의이름
+lecType     전필,전선...
+lecCre      3
+lecHour     3
+lecRm       새빛205
+lecTime     월3,수4
+lecDesc     이 강의는 영국에서 시작되었으며...
+tbTitle     말듣쓰
+tbAuth      이강인
+tbPubl      해찬들
+ratAtten    10
+ratMid      30
+ratFin      30
+ratAss      30
 }
 */
 
-// /signup
 router.post("/", (req, res) => {
   const data = req.body;
 
-  const query1 = "select * from klas_db.users where userID=?";
-  const query2 = "SELECT majID FROM klas_db.majors WHERE majName=?";
+  // majName에서 majID 얻기
+  const query1 = "select majID from majors where majName=?";
 
-  connection.query(query1, [data.userID], (error, result1) => {
+  connection.query(query1, [data.majName], (error, result1) => {
     if (error) {
-      // 아예 db 접근이 안되는 경우
       console.error("MySQL query error: ", error);
-      res.status(500).json({ error: "Internal server error" });
 
-      return;
-    } else {
-      if (result1.length > 0) {
-        console.log("이미 존재하는 학생 ID입니다.");
+      return res.status(500).json({ error: "Internal server error" });
+    }
 
-        res.json({ result: false });
-      } else {
-        connection.query(query2, [data.major], (error, result2) => {
-          if (error) {
-            console.error("MySQL query error: ", error);
-            res.status(500).json({ error: "Internal server error" });
+    if (result1.length > 0) {
+      const majID = result1[0].majID;
 
-            return;
-          } else {
-            if (result2.length > 0) {
-              if (data.type === "학생") {
-                data.type = "student";
-              } else if (data.type === "교수") {
-                data.type = "professor";
-              }
-              const majID = result2[0].majID;
-              const email = `${data.EmailID}@${data.EmailDomain}`;
-              const phone = `${data.phoneNum1}-${data.phoneNum2}-${data.phoneNum3}`;
-              const bMonth = data.birthMonth.toString().padStart(2, "0");
-              const bDay = data.birthDay.toString().padStart(2, "0");
-              const birth = `${data.birthYear}-${bMonth}-${bDay}`;
+      const query2 =
+        "select lecLv, subID, clsNum from lectures l where lecYear=2023 and lecName=? order by clsNum desc ";
 
-              const query3 =
-                "INSERT INTO klas_db.users (userID, pw,userName,userType,majID,phone,birth,email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+      connection.query(query2, [data.lecName], (error, result2) => {
+        if (error) {
+          console.error("MySQL query error: ", error);
 
-              connection.query(
-                query3,
-                [
-                  data.userID,
-                  data.PW,
-                  data.userName,
-                  data.type,
-                  majID,
-                  phone,
-                  birth,
-                  email,
-                ],
-                (error, result3) => {
-                  if (error) {
-                    console.error("MySQL 저장 실패:", error);
+          return res.status(500).json({ error: "Internal server error" });
+        }
 
-                    res.json({ result: false });
-                  } else {
-                    console.log("MySQL 저장 성공:", result3);
+        if (result2.length > 0) {
+          const lecLv = result2[0].lecLv;
+          const subID = result2[0].subID;
+          const clsNum = result2[0].clsNum;
 
-                    res.json({ result: true });
-                  }
-                }
-              );
+          const query3 =
+            "insert into lectures (majID,lecLv,subID,clsNum,lecName,lecType,lecCre,lecHour,lecProf,lecTime,lecRm,lecDesc,tbTitle,tbAuth,tbPubl,ratAtten,ratMid,ratFin,ratAss) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+          value3 = [
+            majID,
+            lecLv,
+            subID,
+            clsNum,
+            data.lecName,
+            data.lecType,
+            data.lecCre,
+            data.lecHour,
+            data.lecProf,
+            data.lecTime,
+            data.lecRm,
+            data.lecDesc,
+            data.tbTitle,
+            data.tbAuth,
+            data.tbPubl,
+            data.ratAtten,
+            data.ratMid,
+            data.ratFin,
+            data.ratAss,
+          ];
+
+          connection.query(query3, value3, (error, result3) => {
+            if (error) {
+              console.error("MySQL query error: ", error);
+
+              return res.status(500).json({ error: "Internal server error" });
             } else {
-              console.log("해당 전공이 존재하지 않습니다.");
+              console.log("MySQL 저장 성공:", result3);
 
-              res.json({ result: false });
+              res.json({ result: true });
             }
-          }
-        });
-      }
+          });
+        } else {
+          console.log("2에서 실패");
+
+          res.json({ result: false });
+        }
+      });
+    } else {
+      console.log("1에서 실패");
+
+      res.json({ result: false });
     }
   });
 });
