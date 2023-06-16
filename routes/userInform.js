@@ -4,7 +4,7 @@ const connection = require("../modules/mysql");
 
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const userID = req.query.userID;
+  let userID = req.query.userID;
 
   // Check if password is NULL and set it to null
   if (userID === "NULL") {

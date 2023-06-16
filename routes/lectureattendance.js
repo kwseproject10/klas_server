@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const connection = require("../modules/mysql").connection;
+const connection = require("../modules/mysql");
 
 // /lectureattendance?lectureID=*
 router.get("/", (req, res) => {
@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
       return;
     }
     if (results.length > 0) {
-      let arr = []
+      let arr = [];
       let temp = 0;
       let dayCount = 0;
 
@@ -34,12 +34,12 @@ router.get("/", (req, res) => {
         const num = row.clNum;
         const date = row.clDate;
         const state = row.atState;
-      
+
         if (iter && arr[arr.length - 1].classWeek !== week) {
           dayCount = 0;
         }
         dayCount++;
-      
+
         if (arr.length === 0 || arr[arr.length - 1].classID !== classID) {
           arr.push({
             classID: classID,
@@ -51,7 +51,7 @@ router.get("/", (req, res) => {
             numOflat: 0,
           });
         }
-      
+
         switch (state) {
           case "attend":
             arr[arr.length - 1].numOfAtt++;
