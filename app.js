@@ -83,6 +83,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // cors 설정
 app.use(cors());
 
+// express.static 미들웨어를 사용하여 정적 파일 경로를 설정
+// public 디렉토리를 정적 파일 디렉토리로 설정
+app.use(express.static(path.join(__dirname, "public")));
+
+// 경로의 GET 요청에 대한 핸들러 정의
+// 클라이언트에서 이미지를 요청할 때 해당 엔드포인트 사용
+app.get("/api/render-image/:imageName", (req, res) => {
+  const { imageName } = req.params;
+  const imagePath = path.join(__dirname, "public", "files", imageName);
+
+  // 이미지 파일 전송
+  res.sendFile(imagePath);
+});
+
 // 해당 경로로 router 등록
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
