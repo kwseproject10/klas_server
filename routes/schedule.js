@@ -52,7 +52,7 @@ router.get("/", (req, res) => {
       var length = 0;
       var index = 0;
       results.forEach((row) => {
-        for (let i = 1; i < 7; i++) {
+        for (let i = 1; i < 9; i++) {
           let part = results.day.substring(i, i + 1);
           if (part != "") {
             line.push(part);
@@ -68,7 +68,7 @@ router.get("/", (req, res) => {
               day = line[i];
               time = "";
             }
-            else {
+            else if(line[i] != ','){
               time = line[i];
               if (temp.getDay() === dateNum(day)) {
                 formattedResults.push({
