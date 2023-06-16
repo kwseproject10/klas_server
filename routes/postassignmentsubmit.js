@@ -22,10 +22,11 @@ const upload = multer({ storage: storage });
 
 router.post("/", upload.single("file"), (req, res) => {
   if (!req.file) {
+    console.log(req.body);
     // 다른 필드에서 전송된 정보
     const userID = req.body.userID;
     const lectureID = req.body.lectureID;
-    const boKey = req.body.boKey;
+    const boKey = req.body.bokey || null;
     const title = req.body.title;
     const content = req.body.content;
 
@@ -37,7 +38,7 @@ router.post("/", upload.single("file"), (req, res) => {
     connection.query(query1, value1, (error, result1) => {
       if (error) {
         console.error("Error saving file to database:", error);
-        return res.status(500).send("Failed to save file to database");
+        return res.status(501).send("Failed to save file to database");
       }
 
       if (result1.length > 0) {
@@ -56,7 +57,7 @@ router.post("/", upload.single("file"), (req, res) => {
         connection.query(query2, value2, (error, result2) => {
           if (error) {
             console.error("Error saving file to database:", error);
-            return res.status(500).send("Failed to save file to database");
+            return res.status(502).send("Failed to save file to database");
           }
 
           if (result2.affectedRows > 0) {
@@ -71,6 +72,8 @@ router.post("/", upload.single("file"), (req, res) => {
       }
     });
   } else {
+    console.log(req.body);
+
     const file = req.file;
     console.log(file);
 
@@ -83,7 +86,7 @@ router.post("/", upload.single("file"), (req, res) => {
     // 다른 필드에서 전송된 정보
     const userID = req.body.userID;
     const lectureID = req.body.lectureID;
-    const boKey = req.body.boKey;
+    const boKey = req.body.bokey || null;
     const title = req.body.title;
     const content = req.body.content;
 
@@ -95,7 +98,7 @@ router.post("/", upload.single("file"), (req, res) => {
     connection.query(query1, value1, (error, result1) => {
       if (error) {
         console.error("Error saving file to database:", error);
-        return res.status(500).send("Failed to save file to database");
+        return res.status(503).send("Failed to save file to database");
       }
 
       // lectureID에 해당하는 강의가 존재할 때
@@ -115,7 +118,7 @@ router.post("/", upload.single("file"), (req, res) => {
         connection.query(query2, value2, (error, result2) => {
           if (error) {
             console.error("Error saving file to database:", error);
-            return res.status(500).send("Failed to save file to database");
+            return res.status(504).send("Failed to save file to database");
           }
 
           if (result2.affectedRows > 0) {
@@ -136,7 +139,7 @@ router.post("/", upload.single("file"), (req, res) => {
             connection.query(query3, value3, (error, result3) => {
               if (error) {
                 console.error("Error saving file to database:", error);
-                return res.status(500).send("Failed to save file to database");
+                return res.status(505).send("Failed to save file to database");
               }
 
               if (result3.affectedRows > 0) {
@@ -149,19 +152,19 @@ router.post("/", upload.single("file"), (req, res) => {
               } else {
                 console.log("3번에서 문제 발생");
 
-                return res.status(500).json({ result: false });
+                return res.status(506).json({ result: false });
               }
             });
           } else {
             console.log("2번에서 문제 발생");
 
-            return res.status(500).json({ result: false });
+            return res.status(507).json({ result: false });
           }
         });
       } else {
         console.log("1번에서 문제 발생");
 
-        return res.status(500).json({ result: false });
+        return res.status(508).json({ result: false });
       }
     });
   }
