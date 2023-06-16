@@ -5,21 +5,35 @@ const connection = require("../modules/mysql");
 // /lecturelastboard?lectureID=*
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
-  const lectureID = req.query.lectureID;
+  let lectureID = req.query.lectureID;
 
   // Check if lectureID is NaN and set it to null
   if (lectureID === "NULL") {
     lectureID = null;
   }
 
-  const query =
-    "SELECT distinct b.boKey,b.boTitle, b.boType, b.boFDate FROM lectures l join boards b INNER JOIN (SELECT boType, MAX(boFDate) AS maxDate FROM boards GROUP BY boType) sub ON b.boType = sub.boType AND b.boFDate = sub.maxDate where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum) = ?";
+  const query = `
+  SELECT DISTINCT b.boKey, b.boTitle, b.boType, b.boFDate 
+  FROM lectures l
+  JOIN boards b ON l.lecKey = b.lecKey
+  INNER JOIN (
+      SELECT boType, MAX(boFDate) AS maxDate 
+      FROM boards 
+      GROUP BY boType
+  ) sub ON b.boType = sub.boType AND b.boFDate = sub.maxDate 
+  WHERE  concat(l.majID, '-', l.lecLv, '-', l.subID, '-', l.clsNum) = ?
+  order by case b.boType
+  when 'notice' then 1
+  when 'download' then 2
+  when 'assignment' then 3
+  end
+    `;
 
   // /lecturelastboard?lectureID=*
   connection.query(query, [lectureID], (err, results) => {
     if (err) {
       console.error("MySQL query error: ", err);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({ error: "Internal server error", details: err });
       return;
     }
 
@@ -39,7 +53,7 @@ router.get("/", (req, res) => {
     } else {
       console.log("notice Fail");
 
-      return res.json({ result: false });
+      return res.status(404).json({ error: "No results found" });
     }
   });
 });
