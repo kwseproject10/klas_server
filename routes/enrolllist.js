@@ -13,10 +13,11 @@ router.get("/", (req, res) => {
 
   // 테스트용 : 2020123456, H020-4-0846-01
   const query = `
-select e.userID 
-from lectures l
-join enrollments e on l.lecKey = e.lecKey
-WHERE  concat(l.majID, '-', l.lecLv, '-', l.subID, '-', l.clsNum) = ?
+  select u.userName name, e.userID ID
+  from lectures l
+  join enrollments e on l.lecKey = e.lecKey
+  join users u on e.userID = u.userID
+  WHERE  concat(l.majID, '-', l.lecLv, '-', l.subID, '-', l.clsNum) = ?
 `;
 
   // /attendance?userID=*&lectureID=*
@@ -27,7 +28,12 @@ WHERE  concat(l.majID, '-', l.lecLv, '-', l.subID, '-', l.clsNum) = ?
     }
 
     if (results.length > 0) {
-      const userIDs = results.map((row) => row.userID);
+      const userIDs = results.map((row) => {
+        return {
+          name: row.name,
+          ID: row.ID,
+        };
+      });
       res.json(userIDs);
     } else {
       return res.json([]);
