@@ -37,6 +37,7 @@ const lectureattendanceRouter = require("./routes/lectureattendance");
 
 const assignmentpostRouter = require("./routes/assignmentpost");
 const attendanceRouter = require("./routes/attendance");
+const professorlecturesRouter = require("./routes/professorlectures");
 
 const lecturelastboardRouter = require("./routes/lecturelastboard");
 
@@ -114,6 +115,7 @@ app.use("/attendance", attendanceRouter);
 
 app.use("/lecturelastboard", lecturelastboardRouter);
 app.use("/lectureattendance", lectureattendanceRouter);
+app.use("/professorlectures",professorlecturesRouter);
 
 app.use("/enrolllecture", enrolllectureRouter);
 
