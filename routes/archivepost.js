@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boTitle name, boPoster poster,boFDate postDate, boHit postHit,boCont postText ,bfName,bfSize,bfPath from boards b left join boardfiles bf on b.boKey = bf.boKey where boType='download' and b.bokey=?";
+    "select boTitle name, boPoster poster,boFDate postDate, boHit postHit,boCont postText ,bfName,bfRName,bfSize,bfPath from boards b left join boardfiles bf on b.boKey = bf.boKey where boType='download' and b.bokey=?";
   /*
 name,poster,postDate,postHit,postfileURL,postText
 */
@@ -34,6 +34,7 @@ name,poster,postDate,postHit,postfileURL,postText
         postText: results[0].postText,
         postFile: {
           name: results[0].bfName || null,
+          realName: results[0].bfRName || null,
           size: results[0].bfSize || null,
           url: results[0].bfPath || null,
         },

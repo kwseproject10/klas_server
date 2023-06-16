@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select u1.userName, u1.userType,m.majName as major,u1.userID as ID,(select count(*) from (select distinct lecYear, lecSem from enrollments as e join lectures as l on e.lecKey = l.lecKey where e.userID = u1.userID) as yearSem) as numberOfTerm,u1.email,u1.phone as phoneNum,u1.birth as birthday,u2.userName as advisor,u2.email as advisorEmail,u2.tel as advisorNum,u1.userState as state , ufPath from users as u1 left join users as u2 on u1.advID = u2.userID join majors as m on u1.majID = m.majID left join userfiles uf on u1.userID = uf.userID where u1.userID = ?";
+    "select u1.userName, u1.userType,m.majName as major,u1.userID as ID,(select count(*) from (select distinct lecYear, lecSem from enrollments as e join lectures as l on e.lecKey = l.lecKey where e.userID = u1.userID) as yearSem) as numberOfTerm,u1.email,u1.phone as phoneNum,u1.birth as birthday,u2.userName as advisor,u2.email as advisorEmail,u2.tel as advisorNum,u1.userState as state , ufRName from users as u1 left join users as u2 on u1.advID = u2.userID join majors as m on u1.majID = m.majID left join userfiles uf on u1.userID = uf.userID where u1.userID = ?";
   /*
 userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorEmail,advisorNum,state
 모범생,student,컴퓨터정보공학부,2020123456,6,swe@kw.ac.kr,010-1234-5678,2000-01-01,이기훈,kihoonlee@kw.ac.kr,02-940-8674,enroll
@@ -52,7 +52,7 @@ userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorE
         advisorEmail: result.advisorEmail || null,
         advisorNum: result.advisorNum || null,
         state: result.state || null,
-        filePath: result.ufPath || null,
+        fileName: result.ufRName || null,
       };
 
       console.log("userinform success");
@@ -75,7 +75,7 @@ userName,userType,major,ID,numberOfTerm,email,phoneNum,birthday,advisor,advisorE
         advisorEmail: null,
         advisorNum: null,
         state: null,
-        filePath: null,
+        fileName: null,
       });
     }
   });

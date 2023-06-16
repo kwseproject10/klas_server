@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
   }
 
   const query =
-    "select boTitle , boPoster,asSDate ,asEDate ,boCont,bfRName,bfSize,bfPath, smFDate,smTitle,smCont, sfRName,sfSize,sfPath from boards b left join boardfiles bf on b.boKey = bf.boKey left join submits s on s.boKey = b.boKey left join submitfiles sf on s.smKey = sf.smKey where boType='assignment' and b.bokey=?";
+    "select boTitle , boPoster,asSDate ,asEDate ,boCont,bfName,bfRName,bfSize,bfPath, smFDate,smTitle,smCont, sfRName,sfSize,sfPath from boards b left join boardfiles bf on b.boKey = bf.boKey left join submits s on s.boKey = b.boKey left join submitfiles sf on s.smKey = sf.smKey where boType='assignment' and b.bokey=?";
   // boTitle,boPoster,asSDate,asEDate,boCont,bfRName,bfSize,bfPath,smFDate,smTitle,smCont,sfRName,sfSize,sfPath
 
   // /assignmentpost?ID=*
@@ -64,7 +64,8 @@ router.get("/", (req, res) => {
           state: state,
           postText: results[0].boCont,
           postFile: {
-            name: results[0].bfRName,
+            name: results[0].bfName,
+            realName: results[0].bfRName,
             size: results[0].bfSize,
             url: results[0].bfPath,
           },
