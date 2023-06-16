@@ -27,6 +27,7 @@ router.post("/", upload.single("file"), (req, res) => {
     const boTitle = req.body.postTitle;
     const lectureID = req.body.lectureID;
     const boCont = req.body.content;
+    const endDate = req.body.endDate;
 
     // lecKey 얻어야 함
     const query1 =
@@ -62,13 +63,15 @@ router.post("/", upload.single("file"), (req, res) => {
             console.log("boPoster: ", boPoster);
 
             const query3 =
-              "INSERT INTO boards (lecKey, boType, boTitle, boCont, boFDate, boPoster) VALUES (?, ?, ?, ?,?,?)";
+              "INSERT INTO boards (lecKey, boType, boTitle, boCont, boFDate,asSDate,asEDate, boPoster) VALUES (?,?,?,?,?,?,?,?)";
             const value3 = [
               lecKey,
               "assignment",
               boTitle,
               boCont,
               now,
+              now,
+              endDate,
               boPoster,
             ];
 
@@ -142,9 +145,17 @@ router.post("/", upload.single("file"), (req, res) => {
             console.log("boPoster: ", boPoster);
 
             const query3 =
-              "INSERT INTO boards (lecKey, boType, boTitle, boCont, boFDate, boPoster) VALUES (?, ?, ?, ?,?,?)";
-            const value3 = [lecKey, "notice", boTitle, boCont, now, boPoster];
-
+              "INSERT INTO boards (lecKey, boType, boTitle, boCont, boFDate,asSDate,asEDate, boPoster) VALUES (?,?,?,?,?,?,?,?)";
+            const value3 = [
+              lecKey,
+              "assignment",
+              boTitle,
+              boCont,
+              now,
+              now,
+              endDate,
+              boPoster,
+            ];
             connection.query(query3, value3, (error, result3) => {
               if (error) {
                 console.error("Error saving file to database:", error);
