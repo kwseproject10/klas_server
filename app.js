@@ -51,6 +51,7 @@ const updatenoticepostRouter = require("./routes/updatenoticepost");
 const postarchiveRouter = require("./routes/postarchive");
 const updatearchivepostRouter = require("./routes/updatearchivepost");
 const postassignmentRouter = require("./routes/postassignment");
+const postassignmentsubmitRouter = require("./routes/postassignmentsubmit");
 const updateassignmentpostRouter = require("./routes/updateassignmentpost");
 
 // express 객체 생성
@@ -113,6 +114,8 @@ app.use("/updateuserinform", updateuserinformRouter);
 app.use("/postnotice", postnoticeRouter);
 
 app.use("/postassignment", postassignmentRouter);
+
+app.use("/postassignmentsubmit", postassignmentsubmitRouter);
 
 app.use("/postarchive", postarchiveRouter);
 
