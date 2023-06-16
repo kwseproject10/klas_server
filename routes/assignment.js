@@ -12,10 +12,9 @@ router.get("/", (req, res) => {
   }
 
   const query = `
-  select b.boKey,boTitle title, b.asSDate startDate, b.asEDate endDate ,s.smDone 
+  select b.boKey,boTitle title, b.asSDate startDate, b.asEDate endDate
   from lectures l 
   join boards b on l.lecKey = b.lecKey and boType = 'assignment' 
-  left join submits s on b.boKey = s.boKey 
   where concat(l.majID,'-',l.lecLv,'-',l.subID,'-',l.clsNum)=?
 `;
 
@@ -37,7 +36,6 @@ router.get("/", (req, res) => {
         startDate: row.startDate,
         endDate: row.endDate,
         due: daysDiff,
-        state: row.smDone === null ? 0 : 1,
       };
     });
 
