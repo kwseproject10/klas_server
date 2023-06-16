@@ -57,55 +57,61 @@ router.post("/", upload.single("file"), (req, res) => {
   // 기존 이미지 정보 조회
   const querySelect = "SELECT * FROM userfiles WHERE userID = ?";
   const valueSelect = [userID];
-  queries.push(executeQuery(querySelect, valueSelect));
 
-  if (file) {
-    const queryInsert =
-      "INSERT INTO userfiles (userID, ufName, ufPath, ufSize, ufRName) VALUES (?, ?, ?, ?, ?)";
-    const valueInsert = [
-      userID,
-      fileName,
-      filePath,
-      fileSize,
-      originalFileName,
-    ];
-    queries.push(executeQuery(queryInsert, valueInsert));
-  }
+  connection.query(querySelect, valueSelect, (err, selectResults) => {
+    if (err) {
+      console.error("Error fetching user files:", err);
+      return res.status(500).send("Failed to fetch user files");
+    }
 
-  const queryUpdate =
-    "UPDATE users SET email = ?, phone = ?, pw = ? WHERE userID = ?";
-  const valueUpdate = [email, phone, pw, userID];
-  queries.push(executeQuery(queryUpdate, valueUpdate));
+    if (file) {
+      const queryInsert =
+        "INSERT INTO userfiles (userID, ufName, ufPath, ufSize, ufRName) VALUES (?, ?, ?, ?, ?)";
+      const valueInsert = [
+        userID,
+        fileName,
+        filePath,
+        fileSize,
+        originalFileName,
+      ];
 
-  Promise.all(queries)
-    .then((results) => {
-      console.log("Results:", results);
-
-      // 기존 이미지 삭제
-      const existingImage = results[0][0];
-      if (existingImage) {
-        const queryDelete = "DELETE FROM userfiles WHERE userID = ?";
-        const valueDelete = [userID];
-        return executeQuery(queryDelete, valueDelete);
-      }
-    })
-    .then(() => {
-      res.status(200).json({
-        result: true,
+      connection.query(queryInsert, valueInsert, (err, insertResults) => {
+        if (err) {
+          console.error("Error inserting user file:", err);
+          return res.status(500).send("Failed to insert user file");
+        }
+        updateUser();
       });
-    })
-    .catch((error) => {
-      console.error("Error saving file to database:", error);
-      res.status(500).send("Failed to save file to database");
-    });
+    } else {
+      updateUser();
+    }
+
+    function updateUser() {
+      const queryUpdate =
+        "UPDATE users SET email = ?, phone = ?, pw = ? WHERE userID = ?";
+      const valueUpdate = [email, phone, pw, userID];
+
+      connection.query(queryUpdate, valueUpdate, (err, updateResults) => {
+        if (err) {
+          console.error("Error updating user:", err);
+          return res.status(500).send("Failed to update user");
+        }
+        if (selectResults.length > 0) {
+          const queryDelete = "DELETE FROM userfiles WHERE userID = ?";
+          const valueDelete = [userID];
+          connection.query(queryDelete, valueDelete, (err, deleteResults) => {
+            if (err) {
+              console.error("Error deleting user file:", err);
+              return res.status(500).send("Failed to delete user file");
+            }
+            res.status(200).json({ result: true });
+          });
+        } else {
+          res.status(200).json({ result: true });
+        }
+      });
+    }
+  });
 });
-
-/*
-
-
-
-
-
-*/
 
 module.exports = router;
