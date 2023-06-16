@@ -23,11 +23,10 @@ router.get("/", (req, res) => {
       res.status(500).json({ error: "Internal server error" });
       return;
     }
-    if (results.length > 0) {
+    if (results.length > 0 && results[0].clKey !== null) {
       let arr = []
       let temp = 0;
       let dayCount = 0;
-
       results.forEach((row, iter) => {
         const classID = row.clKey;
         const week = row.clWeek;

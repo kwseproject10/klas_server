@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const connection = require("../modules/mysql");
+const connection = require("../modules/mysql").connection;
 
 router.get("/", (req, res) => {
   // 쿼리 파라미터 추출
