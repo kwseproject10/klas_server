@@ -21,6 +21,7 @@ router.get("/", (req, res) => {
       res.status(500).json({ error: "Internal server error" });
       return;
     }
+    console.log(results);
 
     if (results.length > 0) {
       // 결과를 원하는 형태로 가공

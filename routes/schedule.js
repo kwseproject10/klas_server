@@ -12,14 +12,14 @@ router.get("/", (req, res) => {
   }
 
   const dateNum = {
-    "일": 0,
-    "월": 1,
-    "화": 2,
-    "수": 3,
-    "목": 4,
-    "금": 5,
-    "토": 6,
-  }
+    일: 0,
+    월: 1,
+    화: 2,
+    수: 3,
+    목: 4,
+    금: 5,
+    토: 6,
+  };
   const timeConv = {
     1: "09:00",
     2: "10:30",
@@ -27,7 +27,7 @@ router.get("/", (req, res) => {
     4: "13:30",
     5: "15:00",
     6: "16:30",
-  }
+  };
 
   let temp = new Date(2023, 2, 5);
 
@@ -60,23 +60,28 @@ router.get("/", (req, res) => {
           }
         }
         temp.setDate(2023, 2, 5);
-        for (; temp != enddate1 && temp != enddate2;) {
+        for (; temp != enddate1 && temp != enddate2; ) {
           let day = "";
           let time = "";
           for (let i = 0; i < length; i++) {
-            if (line[i] === "월" || line[i] === "화" || line[i] === "수" || line[i] === "목" || line[i] === "금") {
+            if (
+              line[i] === "월" ||
+              line[i] === "화" ||
+              line[i] === "수" ||
+              line[i] === "목" ||
+              line[i] === "금"
+            ) {
               day = line[i];
               time = "";
-            }
-            else if(line[i] != ','){
+            } else if (line[i] != ",") {
               time = line[i];
               if (temp.getDay() === dateNum(day)) {
                 formattedResults.push({
-                  'key': index.toString(),
-                  'title': row.title,
-                  'subject': row.subject,
-                  'date': temp.getDate().toString(),
-                  'time': timeConv(time),
+                  key: index.toString(),
+                  title: row.title,
+                  subject: row.subject,
+                  date: temp.getDate().toString(),
+                  time: timeConv(time),
                 });
                 index++;
               }
