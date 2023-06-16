@@ -33,6 +33,7 @@ const archiveRouter = require("./routes/archive");
 const archivepostRouter = require("./routes/archivepost");
 const assignmentRouter = require("./routes/assignment");
 const assignmentnotsubmittedRouter = require("./routes/assignmentnotsubmitted");
+const lectureattendanceRouter = require("./routes/lectureattendance");
 
 const assignmentpostRouter = require("./routes/assignmentpost");
 const attendanceRouter = require("./routes/attendance");
@@ -102,6 +103,7 @@ app.use("/assignmentpost", assignmentpostRouter);
 app.use("/attendance", attendanceRouter);
 
 app.use("/lecturelastboard", lecturelastboardRouter);
+app.use("/lectureattendance", lectureattendanceRouter);
 
 //POST
 app.use("/signup", signupRouter);
