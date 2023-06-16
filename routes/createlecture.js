@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../modules/mysql");
+const multer = require("multer");
+
+const upload = multer().none(); // 파일을 업로드하지 않는 경우
 
 /*
 {
@@ -23,8 +26,10 @@ ratAss      30
 }
 */
 
-router.post("/", (req, res) => {
+router.post("/", upload, (req, res) => {
+  console.log("body: ", req.body);
   const data = req.body;
+  console.log(data);
 
   // majName에서 majID 얻기
   const query1 = "select majID from majors where majName=?";
@@ -55,8 +60,10 @@ router.post("/", (req, res) => {
           const clsNum = result2[0].clsNum;
 
           const query3 =
-            "insert into lectures (majID,lecLv,subID,clsNum,lecName,lecType,lecCre,lecHour,lecProf,lecTime,lecRm,lecDesc,tbTitle,tbAuth,tbPubl,ratAtten,ratMid,ratFin,ratAss) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            "insert into lectures (lecYear,lecSem,majID,lecLv,subID,clsNum,lecName,lecType,lecCre,lecHour,lecProf,lecTime,lecRm,lecDesc,tbTitle,tbAuth,tbPubl,ratAtten,ratMid,ratFin,ratAss) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
           value3 = [
+            2023,
+            1,
             majID,
             lecLv,
             subID,
